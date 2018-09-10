@@ -1,0 +1,141 @@
+.chips {
+  margin: 0;
+  margin-bottom: 30px;
+  padding: 0;
+
+  list-style: none;
+}
+
+.chips__pile {
+  position: relative;
+
+  transition: transform @transition-duration ease;
+}
+
+.chip {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 32px;
+  height: 32px;
+
+  transition: transform @transition-duration ease;
+  transform-origin: center center;
+  cursor: pointer;
+
+  & svg {
+    width: 32px;
+
+    fill: none;
+  }
+
+  &--0 .chip__color {
+    fill: #03c303;
+  }
+
+  &--1 .chip__color {
+    fill: #0eb9b9;
+  }
+
+  &--2 .chip__color {
+    fill: #d08600;
+  }
+
+  &--3 .chip__color {
+    fill: #b362b3;
+  }
+
+  &--4 .chip__color {
+    fill: #a70404;
+  }
+
+  &--5 .chip__color {
+    fill: #333333;
+  }
+
+  &--5 .rating {
+    font: 700 16px "Times New Roman",serif;
+  }
+
+  &--context {
+    position: static;
+
+    height: 32px;
+    margin: 0 8px;
+  }
+
+  &--0&--context {
+    background-image: url("../img/chip1.svg");
+  }
+
+  &--1&--context {
+    background-image: url("../img/chip5.svg");
+  }
+
+  &--2&--context {
+    background-image: url("../img/chip10.svg");
+  }
+
+  &--3&--context {
+    background-image: url("../img/chip25.svg");
+  }
+
+  &--4&--context {
+    background-image: url("../img/chip50.svg");
+  }
+
+  &--5&--context {
+    background-image: url("../img/chip100.svg");
+  }
+}
+
+.chip__white {
+  fill: white;
+  stroke: white;
+  stroke-width: 5px;
+  stroke-dasharray: 8.8px;
+}
+
+.chip__stroke {
+  stroke: #903818;
+  stroke-width: 1px;
+}
+
+.chip__stroke2 {
+  stroke: gray;
+  stroke-width: 1px;
+}
+
+.chip__rating {
+  fill: black;
+  font: bold 16px "Times New Roman", serif;
+
+  &--100 {
+    font-size: 12px;
+  }
+}
+
+.chip__gurt {
+  fill: rgba(0, 0, 0, 0.2);
+}
+
+.bet {
+  animation: bet 0.3s ease-out;
+}
+
+@keyframes bet {
+  to {
+    transform: translate(-60px, -113px);
+  }
+}
+
+@keyframes pile-width {
+  from {
+    width: 0;
+  }
+  to {
+    width: 32px;
+  }
+}

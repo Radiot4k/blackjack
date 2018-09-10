@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Black Jack</title>
+    <link rel="stylesheet" href="css/style.min.css">
+  </head>
+  <body>
+    <header class="page-header">
+      <section class="page-header__settings settings">
+        <form class="settings__form form" action="index.html" method="post" id="settings-form">
+          <h1 class="page-header__title">Black Jack</h1>
+          <label class="form__label" for="deposit">Initial deposit:</label>
+          <input type="number" id="deposit" class="form__input" name="deposit" placeholder="max 1000" required>
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">Quantity of decks:</legend>
+            <ul class="form__list">
+              <li class="form__item">
+                <input class="form__radio visually-hidden" type="radio" name="num-of-decks" value="1" id="deck-2" tabindex="0">
+                <label class="form__label" for="deck-2">2</label>
+              </li>
+              <li class="form__item">
+                <input class="form__radio visually-hidden" type="radio" name="num-of-decks" value="4" id="deck-4" tabindex="0">
+                <label class="form__label" for="deck-4">4</label>
+              </li>
+              <li class="form__item">
+                <input class="form__radio visually-hidden" type="radio" name="num-of-decks" value="6" id="deck-6" tabindex="0" checked>
+                <label class="form__label" for="deck-6">6</label>
+              </li>
+              <li class="form__item">
+                <input class="form__radio visually-hidden" type="radio" name="num-of-decks" value="8" id="deck-8" tabindex="0">
+                <label class="form__label" for="deck-8">8</label>
+              </li>
+            </ul>
+          </fieldset>
+          <button class="button button--start" id="start-game" type="submit" name="button">Start Game</button>
+        </form>
+      </section>
+    </header>
+    <main class="main table hide">
+      <section class="table__top container">
+        <div class="table__discarded-cards">
+
+        </div>
+        <div class="table__chip-rack">
+          <table class="info">
+            <tr>
+              <th class="info__col-title">Initial deposit:</th>
+              <td class="info__col-value"></td>
+            </tr>
+            <tr>
+              <th class="info__col-title">Win:</th>
+              <td class="info__col-value"></td>
+            </tr>
+            <tr>
+              <th class="info__col-title">Quentity of decks:</th>
+              <td class="info__col-value"></td>
+            </tr>
+          </table>
+        </div>
+        <div class="table__shoe">
+
+        </div>
+      </section>
+      <section class="table__middle rules container">
+        <div class="rules__title">Black Jack</div>
+        <div class="rules__first">pays 3 to 2</div>
+        <div class="rules__second">
+          <!-- svg viewBox="0 0 500 120" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <path id="MyPath" fill="none" stroke="red"
+                d="M0,10 C 100,100 400,100 500,10" />
+            </defs>
+            <text>
+              <textPath class="description__second-text" href="#MyPath" textLength="105%">
+                Dealer must draw to 16 and stand on all 17s
+              </textPath>
+            </text>
+          </svg -->
+          Dealer must draw to 16 and stand on all 17s
+        </div>
+        <div class="rules__third">
+          pays 2 to 1<span class="description__upper">&nbsp;Insurance&nbsp;</span>pays 2 to 1
+        </div>
+        <div class="game">
+          <div class="game__dealers-hand">
+
+          </div>
+          <div class="game__players-hand">
+
+          </div>
+          <div class="game__bet bet">
+            <div class="bet__value">
+              Bet: $<span>0</span>
+            </div>
+            <div class="bet__circle">
+              <ul class="bet__circle-stack"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="table__bottom player container">
+        <div class="player__money">$ <span>0</span></div>
+        <ul class="player__stack chips" id="player-stack">
+
+        </ul>
+        <div class="player__buttons">
+          <button class="button button--player" id="deal" type="button">Deal</button>
+          <button class="button button--player hide" id="double" type="button">Double</button>
+          <button class="button button--player hide" id="surrender" type="button">Surrender</button>
+          <button class="button button--player hide" id="stop" type="button">Stop</button>
+          <button class="button button--player hide" id="hit" type="button">Hit</button>
+        </div>
+      </section>
+    </main>
+    <section class="modal hide">
+      <div class="context-menu">
+        <p class="context-menu__title">Exchange chips:</p>
+        <div class="context-menu__0 hide">
+          <div class="context-menu__color-up">
+            <button class="context-menu__button context-menu__button--1to5" type="button" name="color-down-1to5">
+              <div class="context-menu__pile">
+                <div class="chip chip--0 chip--context"></div>
+                <div class="chip chip--0 chip--context"></div>
+                <div class="chip chip--0 chip--context"></div>
+                <div class="chip chip--0 chip--context"></div>
+                <div class="chip chip--0 chip--context"></div>
+              </div>
+              <span></span>
+              <div class="chip chip--1 chip--context"></div>
+            </button>
+          </div>
+        </div>
+        <div class="context-menu__1 hide">
+          <div class="context-menu__color-down">
+            <button class="context-menu__button context-menu__button--5to1" type="button" name="color-down-5to1">
+              <div class="chip chip--1 chip--context"></div>
+              <span></span>
+              <div class="context-menu__pile">
+                <div class="chip chip--0 chip--context"></div>
+                <div class="chip chip--0 chip--context"></div>
+                <div class="chip chip--0 chip--context"></div>
+                <div class="chip chip--0 chip--context"></div>
+                <div class="chip chip--0 chip--context"></div>
+              </div>
+            </button>
+          </div>
+          <div class="context-menu__color-up">
+            <button class="context-menu__button context-menu__button--5to10" type="button" name="color-down-5to10">
+              <div class="context-menu__pile">
+                <div class="chip chip--1 chip--context"></div>
+                <div class="chip chip--1 chip--context"></div>
+              </div>
+              <span></span>
+              <div class="chip chip--2 chip--context"></div>
+            </button>
+          </div>
+          <div class="context-menu__color-up">
+            <button class="context-menu__button context-menu__button--5to25" type="button" name="color-down-5to25">
+              <div class="context-menu__pile">
+                <div class="chip chip--1 chip--context"></div>
+                <div class="chip chip--1 chip--context"></div>
+                <div class="chip chip--1 chip--context"></div>
+                <div class="chip chip--1 chip--context"></div>
+                <div class="chip chip--1 chip--context"></div>
+              </div>
+              <span></span>
+              <div class="chip chip--3 chip--context"></div>
+            </button>
+          </div>
+        </div>
+        <div class="context-menu__2 hide">
+          <div class="context-menu__color-down">
+            <button class="context-menu__button context-menu__button--10to5" type="button" name="color-down-10to5">
+              <div class="chip chip--2 chip--context"></div>
+              <span></span>
+              <div class="context-menu__pile">
+                <div class="chip chip--1 chip--context"></div>
+                <div class="chip chip--1 chip--context"></div>
+              </div>
+            </button>
+          </div>
+          <div class="context-menu__color-up-down">
+            <button class="context-menu__button context-menu__button--10to5and25" type="button" name="color-down-10to5and25">
+              <div class="context-menu__pile">
+                <div class="chip chip--2 chip--context"></div>
+                <div class="chip chip--2 chip--context"></div>
+                <div class="chip chip--2 chip--context"></div>
+              </div>
+              <span></span>
+              <div class="context-menu__pile">
+                <div class="chip chip--3 chip--context"></div>
+                <div class="chip chip--1 chip--context"></div>
+              </div>
+            </button>
+          </div>
+          <div class="context-menu__color-up">
+            <button class="context-menu__button context-menu__button--10to50" type="button" name="color-down-10to50">
+              <div class="context-menu__pile">
+                <div class="chip chip--2 chip--context"></div>
+                <div class="chip chip--2 chip--context"></div>
+                <div class="chip chip--2 chip--context"></div>
+                <div class="chip chip--2 chip--context"></div>
+                <div class="chip chip--2 chip--context"></div>
+              </div>
+              <span></span>
+              <div class="chip chip--4 chip--context"></div>
+            </button>
+          </div>
+        </div>
+        <div class="context-menu__3 hide">
+          <div class="context-menu__color-down">
+            <button class="context-menu__button context-menu__button--25to5" type="button" name="color-down-25to5">
+              <div class="chip chip--3 chip--context"></div>
+              <span></span>
+              <div class="context-menu__pile">
+                <div class="chip chip--1 chip--context"></div>
+                <div class="chip chip--1 chip--context"></div>
+                <div class="chip chip--1 chip--context"></div>
+                <div class="chip chip--1 chip--context"></div>
+                <div class="chip chip--1 chip--context"></div>
+              </div>
+            </button>
+          </div>
+          <div class="context-menu__color-down">
+            <button class="context-menu__button context-menu__button--25to5and10" type="button" name="color-down-25to5and10">
+              <div class="chip chip--3 chip--context"></div>
+              <span></span>
+              <div class="context-menu__pile">
+                <div class="chip chip--2 chip--context"></div>
+                <div class="chip chip--2 chip--context"></div>
+                <div class="chip chip--1 chip--context"></div>
+              </div>
+            </button>
+          </div>
+          <div class="context-menu__color-up">
+            <button class="context-menu__button context-menu__button--25to50" type="button" name="color-down-25to50">
+              <div class="context-menu__pile">
+                <div class="chip chip--3 chip--context"></div>
+                <div class="chip chip--3 chip--context"></div>
+              </div>
+              <span></span>
+              <div class="chip chip--4 chip--context"></div>
+            </button>
+          </div>
+          <div class="context-menu__color-up">
+            <button class="context-menu__button context-menu__button--25to100" type="button" name="color-down-25to100">
+              <div class="context-menu__pile">
+                <div class="chip chip--3 chip--context"></div>
+                <div class="chip chip--3 chip--context"></div>
+                <div class="chip chip--3 chip--context"></div>
+                <div class="chip chip--3 chip--context"></div>
+              </div>
+              <span></span>
+              <div class="chip chip--5 chip--context"></div>
+            </button>
+          </div>
+        </div>
+        <div class="context-menu__4 hide">
+          <div class="context-menu__color-down">
+            <button class="context-menu__button context-menu__button--50to10" type="button" name="color-down-50to10">
+              <div class="chip chip--4 chip--context"></div>
+              <span></span>
+              <div class="context-menu__pile">
+                <div class="chip chip--2 chip--context"></div>
+                <div class="chip chip--2 chip--context"></div>
+                <div class="chip chip--2 chip--context"></div>
+                <div class="chip chip--2 chip--context"></div>
+                <div class="chip chip--2 chip--context"></div>
+              </div>
+            </button>
+          </div>
+          <div class="context-menu__color-down">
+            <button class="context-menu__button context-menu__button--50to25" type="button" name="color-down-50to25">
+              <div class="chip chip--4 chip--context"></div>
+              <span></span>
+              <div class="context-menu__pile">
+                <div class="chip chip--3 chip--context"></div>
+                <div class="chip chip--3 chip--context"></div>
+              </div>
+            </button>
+          </div>
+          <div class="context-menu__color-up">
+            <button class="context-menu__button context-menu__button--50to100" type="button" name="color-down-50to100">
+              <div class="context-menu__pile">
+                <div class="chip chip--4 chip--context"></div>
+                <div class="chip chip--4 chip--context"></div>
+              </div>
+              <span></span>
+              <div class="chip chip--5 chip--context"></div>
+            </button>
+          </div>
+        </div>
+        <div class="context-menu__5 hide">
+          <div class="context-menu__color-down">
+            <button class="context-menu__button context-menu__button--100to25" type="button" name="color-down-100to25">
+              <div class="chip chip--5 chip--context"></div>
+              <span></span>
+              <div class="context-menu__pile">
+                <div class="chip chip--3 chip--context"></div>
+                <div class="chip chip--3 chip--context"></div>
+                <div class="chip chip--3 chip--context"></div>
+                <div class="chip chip--3 chip--context"></div>
+              </div>
+            </button>
+          </div>
+          <div class="context-menu__color-down">
+            <button class="context-menu__button context-menu__button--100to50" type="button" name="color-down-100to50">
+              <div class="chip chip--5 chip--context"></div>
+              <span></span>
+              <div class="context-menu__pile">
+                <div class="chip chip--4 chip--context"></div>
+                <div class="chip chip--4 chip--context"></div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="modal-overlay hide"></div>
+    <div class="modal-text hide"></div>
+    <template id="chip-template">
+      <li class="chips__pile chips__pile--0">
+        <div class="chip chip--0">
+          <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+            <circle class="chip__gurt" r="18" cx="18" cy="18"></circle>
+            <circle class="chip__color" r="17" cx="18" cy="17"></circle>
+            <circle class="chip__white" r="14" cx="18" cy="17"></circle>
+            <circle class="chip__stroke" r="10" cx="18" cy="17"></circle>
+            <circle class="chip__stroke2" r="13" cx="18" cy="17"></circle>
+            <text x="14" y="22.5" class="chip__rating">1</text>
+          </svg>
+        </div>
+      </li>
+      <li class="chips__pile chips__pile--1">
+        <div class="chip chip--1">
+          <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+            <circle class="chip__gurt" r="18" cx="18" cy="18"></circle>
+            <circle class="chip__color" r="17" cx="18" cy="17"></circle>
+            <circle class="chip__white" r="14" cx="18" cy="17"></circle>
+            <circle class="chip__stroke" r="10" cx="18" cy="17"></circle>
+            <circle class="chip__stroke2" r="13" cx="18" cy="17"></circle>
+            <text x="14" y="22.5" class="chip__rating">5</text>
+          </svg>
+        </div>
+      </li>
+      <li class="chips__pile chips__pile--2">
+        <div class="chip chip--2">
+          <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+            <circle class="chip__gurt" r="18" cx="18" cy="18"></circle>
+            <circle class="chip__color" r="17" cx="18" cy="17"></circle>
+            <circle class="chip__white" r="14" cx="18" cy="17"></circle>
+            <circle class="chip__stroke" r="10" cx="18" cy="17"></circle>
+            <circle class="chip__stroke2" r="13" cx="18" cy="17"></circle>
+            <text x="10" y="22" class="chip__rating">10</text>
+          </svg>
+        </div>
+      </li>
+      <li class="chips__pile chips__pile--3">
+        <div class="chip chip--3">
+          <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+            <circle class="chip__gurt" r="18" cx="18" cy="18"></circle>
+            <circle class="chip__color" r="17" cx="18" cy="17"></circle>
+            <circle class="chip__white" r="14" cx="18" cy="17"></circle>
+            <circle class="chip__stroke" r="10" cx="18" cy="17"></circle>
+            <circle class="chip__stroke2" r="13" cx="18" cy="17"></circle>
+            <text x="10" y="22" class="chip__rating">25</text>
+          </svg>
+        </div>
+      </li>
+      <li class="chips__pile chips__pile--4">
+        <div class="chip chip--4">
+          <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+            <circle class="chip__gurt" r="18" cx="18" cy="18"></circle>
+            <circle class="chip__color" r="17" cx="18" cy="17"></circle>
+            <circle class="chip__white" r="14" cx="18" cy="17"></circle>
+            <circle class="chip__stroke" r="10" cx="18" cy="17"></circle>
+            <circle class="chip__stroke2" r="13" cx="18" cy="17"></circle>
+            <text x="10" y="22" class="chip__rating">50</text>
+          </svg>
+        </div>
+      </li>
+      <li class="chips__pile chips__pile--5">
+        <div class="chip chip--5">
+          <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+            <circle class="chip__gurt" r="18" cx="18" cy="18"></circle>
+            <circle class="chip__color" r="17" cx="18" cy="17"></circle>
+            <circle class="chip__white" r="14" cx="18" cy="17"></circle>
+            <circle class="chip__stroke" r="10" cx="18" cy="17"></circle>
+            <circle class="chip__stroke2" r="13" cx="18" cy="17"></circle>
+            <text x="9" y="21" class="chip__rating chip__rating--100">100</text>
+          </svg>
+        </div>
+      </li>
+      <div class="card" id="card-template">
+
+      </div>
+
+    </template>
+    <script src="js/script.min.js"></script>
+  </body>
+</html>

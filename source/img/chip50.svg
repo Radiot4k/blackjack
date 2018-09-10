@@ -1,0 +1,13 @@
+<svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .chip__rating {
+      font: 700 16px "Times New Roman",serif;
+    }
+  </style>
+  <circle class="chip__gurt" r="18" cx="18" cy="18" fill="rgba(0, 0, 0, 0.2)"></circle>
+  <circle class="chip__color" r="17" cx="18" cy="17" fill="#a70404"/>
+  <circle class="chip__white" r="14" cx="18" cy="17" fill="#ffffff" stroke="#ffffff" stroke-width="5" stroke-dasharray="8.8"/>
+  <circle class="chip__stroke" r="10" cx="18" cy="17" stroke="#903818" stroke-width="1" fill="none"/>
+  <circle class="chip__stroke2" r="13" cx="18" cy="17" stroke="gray" stroke-width="1" fill="none"/>
+  <text x="10" y="22.4" class="chip__rating" fill="#000000">50</text>
+</svg>
