@@ -25,6 +25,7 @@
   margin: 0;
   padding: 0;
 
+  font-size: 14px;
   color: #000000;
   text-transform: uppercase;
 }
@@ -34,7 +35,7 @@
   align-items: center;
 
   width: 100%;
-  padding: 10px;
+  padding: 5px 10px;
 
   font-family: @font2;
 
@@ -43,237 +44,15 @@
   border-radius: 2px;
   cursor: pointer;
 
-  &:hover {
-    color: white;
-
-    background-color: darkgray;
+  &:hover .chip {
+    animation: rotate-360 2s ease;
   }
 
-  &:active {
-    color: white;
-
-    background-color: red;
-  }
-
-  &--1to5 .context-menu__pile {
-    .generate-chips(@n) when (@n > 1) {
-      & .chip--context:nth-child(@{n}) {
-        position: absolute;
-        top: 0;
-        left: (@n - 1) * 20px;
-      }
-      .generate-chips(@n - 1);
-    }
-    .generate-chips(5);
-  }
-
-  &--1to5 span {
-    margin-right: -10px;
-    margin-left: 80px;
-
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
-  }
-
-  &--5to1 .context-menu__pile {
-    .generate-chips(@n) when (@n > 1) {
-      & .chip--context:nth-child(@{n}) {
-        position: absolute;
-        top: 0;
-      	left: (@n - 1) * 20px;
-      }
-      .generate-chips(@n - 1);
-    }
-    .generate-chips(5);
-  }
-
-  &--5to1 span {
-    margin-right: -10px;
-
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
-  }
-
-  &--5to10 .context-menu__pile {
-    .generate-chips(@n) when (@n > 1) {
-      & .chip--context:nth-child(@{n}) {
-        position: absolute;
-        top: 0;
-      	left: (@n - 1) * 20px;
-      }
-      .generate-chips(@n - 1);
-    }
-    .generate-chips(2);
-  }
-
-  &--5to10 span {
-    margin-right: -10px;
-    margin-left: 20px;
-
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
-  }
-
-  &--5to25 .context-menu__pile {
-    .generate-chips(@n) when (@n > 1) {
-      & .chip--context:nth-child(@{n}) {
-        position: absolute;
-        top: 0;
-      	left: (@n - 1) * 20px;
-      }
-      .generate-chips(@n - 1);
-    }
-    .generate-chips(5);
-  }
-
-  &--5to25 span {
-    margin-right: -10px;
-    margin-left: 80px;
-
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
-  }
-
-  &--10to5 .context-menu__pile {
-    .generate-chips(@n) when (@n > 1) {
-      & .chip--context:nth-child(@{n}) {
-        position: absolute;
-        top: 0;
-        left: (@n - 1) * 20px;
-      }
-      .generate-chips(@n - 1);
-    }
-    .generate-chips(2);
-  }
-
-  &--10to5 span {
-    margin-right: -10px;
-    //margin-left: 80px;
-
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
-  }
-
-  &--10to5and25 .context-menu__pile {
-    .generate-chips(@n) when (@n > 1) {
-      & .chip--context:nth-child(@{n}) {
-        position: absolute;
-        top: 0;
-        left: (@n - 1) * 20px;
-      }
-      .generate-chips(@n - 1);
-    }
-    .generate-chips(3);
-  }
-
-  &--10to5and25 span {
-    margin-right: -10px;
-    margin-left: 40px;
-
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
-  }
-
-  &--10to50 .context-menu__pile {
-    .generate-chips(@n) when (@n > 1) {
-      & .chip--context:nth-child(@{n}) {
-        position: absolute;
-        top: 0;
-        left: (@n - 1) * 20px;
-      }
-      .generate-chips(@n - 1);
-    }
-    .generate-chips(5);
-  }
-
-  &--10to50 span {
-    margin-right: -10px;
-    margin-left: 80px;
-
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
-  }
-
-  &--25to5 .context-menu__pile {
-    .generate-chips(@n) when (@n > 1) {
-      & .chip--context:nth-child(@{n}) {
-        position: absolute;
-        top: 0;
-        left: (@n - 1) * 20px;
-      }
-      .generate-chips(@n - 1);
-    }
-    .generate-chips(5);
-  }
-
-  &--25to5 span {
-    margin-right: -10px;
-    //margin-left: 80px;
-
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
-  }
-
-  &--25to5and10 .context-menu__pile {
-    .generate-chips(@n) when (@n > 1) {
-      & .chip--context:nth-child(@{n}) {
-        position: absolute;
-        top: 0;
-        left: (@n - 1) * 20px;
-      }
-      .generate-chips(@n - 1);
-    }
-    .generate-chips(3);
-  }
-
-  &--25to5and10 span {
-    margin-right: -10px;
-    //margin-left: 40px;
-
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
-  }
-
-  &--25to50 .context-menu__pile {
-    .generate-chips(@n) when (@n > 1) {
-      & .chip--context:nth-child(@{n}) {
-        position: absolute;
-        top: 0;
-        left: (@n - 1) * 20px;
-      }
-      .generate-chips(@n - 1);
-    }
-    .generate-chips(2);
-  }
-
-  &--25to50 span {
-    margin-right: -10px;
-    margin-left: 20px;
-
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
-  }
-
-  &--25to100 .context-menu__pile {
-    .generate-chips(@n) when (@n > 1) {
-      & .chip--context:nth-child(@{n}) {
-        position: absolute;
-        top: 0;
-        left: (@n - 1) * 20px;
-      }
-      .generate-chips(@n - 1);
-    }
-    .generate-chips(4);
-  }
-
-  &--25to100 span {
-    margin-right: -10px;
-    margin-left: 60px;
-
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
-  }
-
+  &--1to5 .context-menu__pile,
+  &--5to1 .context-menu__pile,
+  &--5to25 .context-menu__pile,
+  &--10to50 .context-menu__pile,
+  &--25to5 .context-menu__pile,
   &--50to10 .context-menu__pile {
     .generate-chips(@n) when (@n > 1) {
       & .chip--context:nth-child(@{n}) {
@@ -286,15 +65,25 @@
     .generate-chips(5);
   }
 
-  &--50to10 span {
-    margin-right: -10px;
-    //margin-left: 60px;
-
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
+  &--5to10 .context-menu__pile,
+  &--10to5 .context-menu__pile,
+  &--25to50 .context-menu__pile,
+  &--50to25 .context-menu__pile,
+  &--50to100 .context-menu__pile,
+  &--100to50 .context-menu__pile {
+    .generate-chips(@n) when (@n > 1) {
+      & .chip--context:nth-child(@{n}) {
+        position: absolute;
+        top: 0;
+      	left: (@n - 1) * 20px;
+      }
+      .generate-chips(@n - 1);
+    }
+    .generate-chips(2);
   }
 
-  &--50to25 .context-menu__pile {
+  &--10to5and25 .context-menu__pile,
+  &--25to5and10 .context-menu__pile {
     .generate-chips(@n) when (@n > 1) {
       & .chip--context:nth-child(@{n}) {
         position: absolute;
@@ -303,37 +92,10 @@
       }
       .generate-chips(@n - 1);
     }
-    .generate-chips(2);
+    .generate-chips(3);
   }
 
-  &--50to25 span {
-    margin-right: -10px;
-    //margin-left: 60px;
-
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
-  }
-
-  &--50to100 .context-menu__pile {
-    .generate-chips(@n) when (@n > 1) {
-      & .chip--context:nth-child(@{n}) {
-        position: absolute;
-        top: 0;
-        left: (@n - 1) * 20px;
-      }
-      .generate-chips(@n - 1);
-    }
-    .generate-chips(2);
-  }
-
-  &--50to100 span {
-    margin-right: -10px;
-    margin-left: 20px;
-
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
-  }
-
+  &--25to100 .context-menu__pile,
   &--100to25 .context-menu__pile {
     .generate-chips(@n) when (@n > 1) {
       & .chip--context:nth-child(@{n}) {
@@ -346,35 +108,48 @@
     .generate-chips(4);
   }
 
-  &--100to25 span {
+  & span {
     margin-right: -10px;
-    //margin-left: 20px;
 
     border: 10px solid transparent;
     border-left: 15px solid #fff;
   }
 
-  &--100to50 .context-menu__pile {
-    .generate-chips(@n) when (@n > 1) {
-      & .chip--context:nth-child(@{n}) {
-        position: absolute;
-        top: 0;
-        left: (@n - 1) * 20px;
-      }
-      .generate-chips(@n - 1);
-    }
-    .generate-chips(2);
+  &--10to5and25 span {
+    margin-left: 40px;
   }
 
-  &--100to50 span {
-    margin-right: -10px;
-    //margin-left: 20px;
+  &--1to5 span,
+  &--5to25 span,
+  &--10to50 span {
+    margin-left: 80px;
+  }
 
-    border: 10px solid transparent;
-    border-left: 15px solid #fff;
+  &--25to100 span {
+    margin-left: 60px;
+  }
+
+  &--5to10 span,
+  &--25to50 span,
+  &--50to100 span {
+    margin-left: 20px;
   }
 }
 
 .context-menu__pile {
   position: relative;
+}
+
+@keyframes rotate-360 {
+  from {
+    transform: rotateY(0);
+  }
+
+  50% {
+    transform: rotateY(360deg);
+  }
+
+  to {
+    transform: rotateY(0);
+  }
 }

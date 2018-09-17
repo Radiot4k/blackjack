@@ -8,13 +8,19 @@
   </head>
   <body>
     <header class="page-header">
-      <section class="page-header__settings settings">
+      <h1 class="page-header__title">BlackJack</h1>
+      <section class="start-game">
+        <button class="button button--new-game" type="button" name="new-game">New game</button>
+        <button class="button button--continue" type="button" name="continue"></button>
+      </section>
+      <section class="settings hide">
         <form class="settings__form form" action="index.html" method="post" id="settings-form">
-          <h1 class="page-header__title">Black Jack</h1>
+          <label class="form__label" for="player-name">Your name:</label>
+          <input type="text" id="player-name" class="form__input" name="player-name" required>
           <label class="form__label" for="deposit">Initial deposit:</label>
-          <input type="number" id="deposit" class="form__input" name="deposit" placeholder="max 1000" required>
+          <input type="number" id="deposit" class="form__input" name="deposit" min="1" max="1000" placeholder="maximum 1000" required>
           <fieldset class="form__fieldset">
-            <legend class="form__legend">Quantity of decks:</legend>
+            <legend class="form__legend">Number of decks:</legend>
             <ul class="form__list">
               <li class="form__item">
                 <input class="form__radio visually-hidden" type="radio" name="num-of-decks" value="1" id="deck-2" tabindex="0">
@@ -39,57 +45,37 @@
       </section>
     </header>
     <main class="main table hide">
-      <section class="table__top container">
-        <div class="table__discarded-cards">
-
-        </div>
-        <div class="table__chip-rack">
-          <table class="info">
-            <tr>
-              <th class="info__col-title">Initial deposit:</th>
-              <td class="info__col-value"></td>
-            </tr>
-            <tr>
-              <th class="info__col-title">Win:</th>
-              <td class="info__col-value"></td>
-            </tr>
-            <tr>
-              <th class="info__col-title">Quentity of decks:</th>
-              <td class="info__col-value"></td>
-            </tr>
-          </table>
-        </div>
+      <section class="table__top">
+        <div class="table__chip-rack"></div>
         <div class="table__shoe">
 
         </div>
       </section>
-      <section class="table__middle rules container">
-        <div class="rules__title">Black Jack</div>
-        <div class="rules__first">pays 3 to 2</div>
-        <div class="rules__second">
-          <!-- svg viewBox="0 0 500 120" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <path id="MyPath" fill="none" stroke="red"
-                d="M0,10 C 100,100 400,100 500,10" />
-            </defs>
-            <text>
-              <textPath class="description__second-text" href="#MyPath" textLength="105%">
-                Dealer must draw to 16 and stand on all 17s
-              </textPath>
-            </text>
-          </svg -->
-          Dealer must draw to 16 and stand on all 17s
-        </div>
-        <div class="rules__third">
-          pays 2 to 1<span class="description__upper">&nbsp;Insurance&nbsp;</span>pays 2 to 1
+      <section class="table__middle">
+        <div class="rules">
+          <div class="rules__title">Black Jack</div>
+          <div class="rules__first">pays 3 to 2</div>
+          <div class="rules__second">
+            <!-- svg viewBox="0 0 500 120" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <path id="MyPath" fill="none" stroke="red"
+                  d="M0,10 C 100,100 400,100 500,10" />
+              </defs>
+              <text>
+                <textPath class="description__second-text" href="#MyPath" textLength="105%">
+                  Dealer must draw to 16 and stand on all 17s
+                </textPath>
+              </text>
+            </svg -->
+            Dealer must draw to 16 and stand on all 17s
+          </div>
+          <div class="rules__third">
+            pays 2 to 1<span class="description__upper">&nbsp;Insurance&nbsp;</span>pays 2 to 1
+          </div>
         </div>
         <div class="game">
-          <div class="game__dealers-hand">
-
-          </div>
-          <div class="game__players-hand">
-
-          </div>
+          <div class="game__dealers-hand"></div>
+          <div class="game__players-hand"></div>
           <div class="game__bet bet">
             <div class="bet__value">
               Bet: $<span>0</span>
@@ -100,7 +86,7 @@
           </div>
         </div>
       </section>
-      <section class="table__bottom player container">
+      <section class="table__bottom player">
         <div class="player__money">$ <span>0</span></div>
         <ul class="player__stack chips" id="player-stack">
 

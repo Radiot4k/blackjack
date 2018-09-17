@@ -38,10 +38,9 @@ img {
   min-width: 114px;
   padding: 10px;
 
-  font-family: @font2;
   color: #ffffff;
+  text-transform: capitalize;
 
-  //background-color: @button-background;
   background-image: linear-gradient(45deg, @button-background-from, @button-background-to);
   border: 1px solid #290c04;
   border-radius: 5px;
@@ -67,7 +66,7 @@ img {
   }
 
   &--start {
-    margin-top: 10px;
+    margin-top: 16px;
   }
 
   &--start:hover::after {
@@ -75,10 +74,9 @@ img {
   }
 
   &--player {
-    min-width: 75px;
+    min-width: 65px;
     padding: 6px;
 
-    font-family: @font2;
     font-size: 12px;
 
     border-radius: 2px;
@@ -110,14 +108,6 @@ img {
   max-width: 767px;
   margin: 0 auto;
   padding: 0 6.25%;
-
-  &:first-child {
-    margin-bottom: 20vh;
-  }
-
-  &:last-child {
-    margin-top: auto;
-  }
 }
 
 .card {
@@ -149,10 +139,6 @@ img {
   }
 }
 
-.overlay {
-
-}
-
 @media (min-width: @tablet-width) {
   .container {
     max-width: 1149px;
@@ -162,7 +148,7 @@ img {
 
 @media (min-width: @desktop-width) {
   .container {
-    max-width: 1150px;
+    max-width: 1050px;
     padding: 0 50px;
   }
 }

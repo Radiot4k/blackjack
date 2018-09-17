@@ -1,12 +1,12 @@
 'use strict';
 
 (function () {
-  var shuffleCards = function () {
-    function compareRandom(a, b) {
+  window.shuffleCards = function () {
+    var compareRandom = function (a, b) {
       return Math.random() - 0.5;
     };
+
     window.util.gameDeck.sort(compareRandom);
-    // добавляем желтую карту:
     window.util.gameDeck.splice(-window.util.gameDeck.length / 4, 0, 'yellow');
   };
 
@@ -21,6 +21,6 @@
         i++;
       }
     }
-    shuffleCards();
+    window.shuffleCards();
   };
 })();

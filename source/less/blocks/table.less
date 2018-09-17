@@ -1,47 +1,104 @@
 .table {
   height: 100vh;
+
+  transition: opacity 0.3s ease;
 }
 
 .table__top {
+  box-sizing: border-box;
+  position: absolute;
+
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+
+  width: 100vw;
 }
 
 .table__middle {
-}
+  box-sizing: border-box;
 
-.table__bottom {
+  position: absolute;
 
-}
-
-.table__discarded-cards {
-  width: 46px;
-  height: 62px;
-
-  border: 2px solid #fbffc3;
-  border-radius: 5px;
-}
-
-.table__chip-rack {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  background-color: #fbffc3;
+  width: 100vw;
+  height: 100vh;
+}
 
-  transform: translateY(-10px);
+.table__bottom {
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 10px;
+
+  width: 100%;
+  padding: 0 10px;
+}
+
+.table__chip-rack {
+  margin: 0 auto;
+  padding: 0 10px;
+
+  font-size: 10px;
+  font-weight: 400;
+  color: #000000;
+  text-align: center;
+  text-transform: capitalize;
+
+  background-color: #fbffc3;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .table__shoe {
-  position: relative;
+  position: absolute;
+  top: 0;
+  right: 0;
 
-  width: 50px;
-  height: 66px;
+  display: flex;
+  align-items: flex-end;
 
-  border: 2px solid #fbffc3;
+  width: 66px;
+  height: 132px;
+
+  background-color: #000000;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.3), transparent);
   border-radius: 5px;
 
-  transform: rotate(-45deg);
+  transform: translate(50%, -50%) rotate(45deg);
+
+  &::before {
+    content: "";
+    z-index: 10;
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    background-image: url("../img/shoe.png");
+    background-repeat: no-repeat;
+    background-size: 60px;
+    background-position: bottom;
+    transform: translateY(-10px);
+  }
+
+  &::after {
+    content: "SHOE";
+
+    position: absolute;
+    bottom: 32px;
+    z-index: 10;
+
+    width: 100%;
+
+    font-size: 10px;
+    text-align: center;
+    color: #fbffc3;
+  }
 }
 
 .table__player-hand {

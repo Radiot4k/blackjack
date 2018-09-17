@@ -1,6 +1,7 @@
 .player {
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   align-items: center;
 }
 
@@ -9,17 +10,35 @@
 }
 
 .player__money {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .player__stack {
-  box-sizing: border-box;
-
-  display: flex;
-  flex-wrap: wrap;
-
+  width: 96px;
   transition: @transition-duration ease;
 }
 
 .player__buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-height: 567px) {
+  .player {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .player__money {
+    order: 1;
+
+    margin-bottom: 0;
+  }
+
+  .player__buttons {
+    order: 2;
+
+    width: 96px;
+  }
 }

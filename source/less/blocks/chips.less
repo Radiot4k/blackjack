@@ -1,6 +1,6 @@
 .chips {
   margin: 0;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   padding: 0;
 
   list-style: none;
@@ -9,7 +9,9 @@
 .chips__pile {
   position: relative;
 
-  transition: transform @transition-duration ease;
+  width: 30px;
+
+  transition: transform 0.5s ease;
 }
 
 .chip {
@@ -18,15 +20,15 @@
   justify-content: center;
   align-items: center;
 
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
 
-  transition: transform @transition-duration ease;
+  transition: transform 0.5s ease;
   transform-origin: center center;
   cursor: pointer;
 
   & svg {
-    width: 32px;
+    width: 30px;
 
     fill: none;
   }
@@ -62,8 +64,9 @@
   &--context {
     position: static;
 
-    height: 32px;
     margin: 0 8px;
+
+    background-repeat: no-repeat;
   }
 
   &--0&--context {
@@ -121,13 +124,9 @@
   fill: rgba(0, 0, 0, 0.2);
 }
 
-.bet {
-  animation: bet 0.3s ease-out;
-}
-
-@keyframes bet {
-  to {
-    transform: translate(-60px, -113px);
+@media (max-height: 567px) {
+  .chips {
+    margin-bottom: 0;
   }
 }
 
