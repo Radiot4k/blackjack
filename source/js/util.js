@@ -11,6 +11,30 @@ window.util = (function () {
         action();
       }
     },
+    Chips: [{
+      name: 'type1',
+      value: 1
+    },
+    {
+      name: 'type2',
+      value: 5
+    },
+    {
+      name: 'type3',
+      value: 10
+    },
+    {
+      name: 'type4',
+      value: 25
+    },
+    {
+      name: 'type5',
+      value: 50
+    },
+    {
+      name: 'type6',
+      value: 100
+    }],
     findAncestor: function (el, cls) {
       while ((el = el.parentElement) && !el.classList.contains(cls));
       return el;
@@ -41,55 +65,83 @@ window.util = (function () {
       var chipElement = chipTemplate.cloneNode(true);
       return chipElement;
     },
-    setTransform: function (el, val) {
-      el.style.transform = val;
+    addClass: function (elem, className) {
+      elem.classList.add(className);
     },
-    setOpacity: function (el, val) {
-      el.style.opacity = val;
+    removeClass: function (elem, className) {
+      elem.classList.remove(className);
     },
-    removeChipsFromPile: function (fromParent, pileNumber, toParent, deg, amount) {
-      window.count++;
-      if (window.count === amount) {
-        clearInterval(window.intevalId);
-      }
-      var piles = fromParent.querySelectorAll('.chips__pile--' + pileNumber);
-      var chipToRemove = piles[piles.length - 1].lastChild;
-      var chipToRemoveRect = chipToRemove.getBoundingClientRect();
-      var toParentRect = toParent.getBoundingClientRect();
-      var coord = {};
-      coord.x = toParentRect.left - chipToRemoveRect.left + toParentRect.width / 2 - chipToRemoveRect.width / 2;
-      coord.y = (chipToRemoveRect.top + chipToRemoveRect.height) * -1;
-      coord.deg = deg;
-
-      var checkPile = function () {
-        if (piles[piles.length - 1].children.length === 0) {
-          piles[piles.length - 1].remove();
-          window.sortPiles(fromParent);
-        }
-      };
-
-      window.util.removeElement(chipToRemove, 500, 'translate', coord);
-      window.setTimeout(checkPile, 500);
+    setStyle: function (elem, st, val) {
+      elem.style[st] = val;
     },
-    addChipsInPile: function (toParent, pileNumber, fromParent, deg, amount) {
-      window.countAdd++;
-      if (window.countAdd === amount) {
-        clearInterval(window.intevalIdAdd);
-      }
-      var pilesAll = toParent.querySelectorAll('.chips__pile');
-      var piles = toParent.querySelectorAll('.chips__pile--' + pileNumber);
-      var pileNeighbor = {};
+    selectChips: function (parent, pileNumber, amount) {
+      var pilesAll = parent.querySelectorAll('.chips__pile--' + pileNumber);
+      var chips = [];
       for (var i = 0; i < pilesAll.length; i++) {
-        if (pilesAll[i].classList[1].slice(-1) <= pileNumber) {
-          pileNeighbor.val = pilesAll[i];
-          pileNeighbor.pos = 'current';
+        for (var j = 0; j < pilesAll[i].children.length; j++) {
+          chips.splice(0, 0, pilesAll[i].children[j]);
+        }
+      }
+      var selectedChips = [];
+      for (i = 0; i < amount; i++) {
+        selectedChips.splice(0, 0, chips[i]);
+      }
+      return selectedChips;
+    },
+    getCoordinatesToMove: function (element, toParentRect) {
+      var elementTransform = element.style.transform;
+      var elementRect = element.getBoundingClientRect();
+      var coord = {};
+      coord.x = toParentRect.left - elementRect.left + toParentRect.width / 2 - elementRect.width / 2 + parseInt(elementTransform.slice(10, elementTransform.indexOf('px')), 10);
+      coord.y = toParentRect.top - elementRect.top + parseInt(elementTransform.slice(elementTransform.indexOf(',') + 2, elementTransform.indexOf('px', elementTransform.indexOf(','))), 10);
+      return coord;
+    },
+    splitChips: function (elements, k) {
+      for (var i = 0; i < elements.length; i++) {
+        var elemTransform = elements[i].style.transform;
+        var x = elemTransform.slice(10, elemTransform.indexOf('px')) - (20 * i * k);
+        var y = elemTransform.slice(elemTransform.indexOf(',') + 2, elemTransform.indexOf('px', elemTransform.indexOf(','))) - (i * k);
+        var deg = elemTransform.slice(elemTransform.indexOf('rotate(') + 7, elemTransform.indexOf('deg'));
+        elements[i].style.transform = 'translate(' + x + 'px, ' + y + 'px) rotate(' + deg + 'deg)';
+      }
+    },
+    assembleChips: function (elements) {
+      for (var i = 0; i < elements.length; i++) {
+        var elemTransform = elements[i].style.transform;
+        var x = elemTransform.slice(10, elemTransform.indexOf('px')) - 20 * i;
+        var y = elemTransform.slice(elemTransform.indexOf(',') + 2, elemTransform.indexOf('px', elemTransform.indexOf(','))) - i;
+        var deg = window.util.getRandomNumber(-30, 30);
+        elements[i].style.transform = 'translate(' + x + 'px, ' + y + 'px) rotate(' + deg + 'deg)';
+      }
+    },
+    checkPile: function (parent, pileNumber) {
+      var piles = parent.querySelectorAll('.chips__pile--' + pileNumber);
+      if (piles[piles.length - 1].children.length === 0) {
+        piles[piles.length - 1].remove();
+        //window.sortPiles(parent);
+      }
+    },
+    findNeighbor: function (parent, pileNumber) {
+      var neighbor = {};
+      var pilesAll = parent.querySelectorAll('.chips__pile');
+      for (var i = 0; i < pilesAll.length; i++) {
+        if (pilesAll[i].classList.value.slice(-1) <= pileNumber) {
+          neighbor.val = pilesAll[i];
+          neighbor.pos = 'current';
         } else {
-          pileNeighbor.val = pilesAll[i];
-          pileNeighbor.pos = 'next';
+          neighbor.val = pilesAll[i];
+          neighbor.pos = 'next';
           break;
         }
       }
+      return neighbor;
+    },
+    addChipsInPile: function (chipToAdd, toParent, pileNumber, fromParent, rotateDeg) {
+      var piles = toParent.querySelectorAll('.chips__pile--' + pileNumber);
+
       var pastePile = function () {
+        var pilesAll = toParent.querySelectorAll('.chips__pile');
+        var pileNeighbor = window.util.findNeighbor(toParent, pileNumber);
         var pile = window.util.createChipsPile(pileNumber);
         switch (pileNeighbor.pos) {
           case 'current':
@@ -98,80 +150,49 @@ window.util = (function () {
           case 'next':
             pileNeighbor.val.before(pile);
         }
-        window.sortPiles(toParent);
         piles = toParent.querySelectorAll('.chips__pile--' + pileNumber);
       };
 
       if (piles.length === 0 || piles[piles.length - 1].children.length === 10) {
         pastePile();
       }
-
-      var chipToAdd = window.util.createChip(pileNumber);
       var pileRect = piles[piles.length - 1].getBoundingClientRect();
       var fromParentRect = fromParent.getBoundingClientRect();
-      var coord = {};
-      coord.x1 = fromParentRect.left - pileRect.left + fromParentRect.width / 2 - pileRect.width / 2;
-      coord.y1 = (pileRect.top - fromParentRect.top + pileRect.height) * -1;
-      coord.deg1 = deg;
-      coord.x2 = window.util.getRandomNumber(-1, 1);
-      coord.y2 = piles[piles.length - 1].children.length * -1;
-      coord.deg2 = window.util.getRandomNumber(-30, 30);
-      window.util.addElement(piles[piles.length - 1], chipToAdd, 'transform', coord);
+      var x = fromParentRect.left - pileRect.left + fromParentRect.width / 2 - pileRect.width / 2;
+      var y = fromParentRect.top - pileRect.top;
+      var deg = rotateDeg;
+      chipToAdd.style.transform = 'translate(' + x + 'px, ' + y + 'px) rotate(' + deg + 'deg)';
+      piles[piles.length - 1].appendChild(chipToAdd);
     },
     hideElement: function (elem, time, method) {
-      switch (method) {
+      switch (method.name) {
         case 'opacity':
-          elem.style.opacity = '0';
+          elem.style.opacity = method.end;
           break;
         case 'translateY':
-          elem.style.transform = 'translateY(-100%)';
+          elem.style.transform = method.end;
           break;
       }
       window.setTimeout(window.util.addClassHide, time, elem);
     },
-    addClassHide: function (elem) {
-      elem.classList.add('hide');
-      elem.removeAttribute('style');
-    },
     showElement: function (elem, method) {
-      switch (method) {
+      switch (method.name) {
         case 'opacity':
-          elem.style.opacity = '0';
-          window.setTimeout(window.util.setOpacity, 10, elem, '1');
+          elem.style.opacity = method.start;
+          window.setTimeout(window.util.setOpacity, 10, elem, method.end);
           break;
-        case 'translateY':
-          elem.style.transform = 'translateY(-100%)';
-          window.setTimeout(window.util.setTransform, 10, elem, 'translateY(0)');
+        case 'transform':
+          elem.style.transform = method.start;
+          window.setTimeout(window.util.setTransform, 10, elem, method.end);
           break;
       }
       elem.classList.remove('hide');
     },
-    addElement: function (parent, elem, method, coordinates) {
-      switch (method) {
-        case 'opacity':
-          elem.style.opacity = '0';
-          window.setTimeout(window.util.setOpacity, 10, elem, '1');
-          break;
-        case 'transform':
-          elem.style.transform = 'translate(' + coordinates.x1 + 'px, ' + coordinates.y1 + 'px) rotate(' + coordinates.deg1 + 'deg)';
-          window.setTimeout(window.util.setTransform, 20, elem, 'translate(' + coordinates.x2 + 'px, ' + coordinates.y2 + 'px) rotate(' + coordinates.deg2 + 'deg)');
-          break;
-      }
-      parent.appendChild(elem);
+    addElement: function (parent, element) {
+      parent.appendChild(element);
     },
-    removeElement: function (elem, time, method, coordinates) {
-      var remove = function () {
-        elem.remove();
-      };
-      switch (method) {
-        case 'opacity':
-          elem.style.opacity = '0';
-          break;
-        case 'translate':
-          elem.style.transform = 'translate(' + coordinates.x + 'px, ' + coordinates.y + 'px) rotate(' + coordinates.deg + 'deg)';
-          break;
-      }
-      window.setTimeout(remove, time);
+    removeElement: function (element) {
+      element.remove();
     }
   };
 })();

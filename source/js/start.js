@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var TIME = 300;
+  var HOLD = 10;
   var pageHeader = document.querySelector('.page-header');
   var startGameSection = pageHeader.querySelector('.start-game');
   var buttons = startGameSection.querySelectorAll('.button--new-game, .button--continue');
@@ -15,6 +17,7 @@
   var playerMoney = table.querySelector('.player__money span');
   var isStorageSupport = true;
   var storPlayer = {};
+  var method = {};
 
   try {
     storPlayer.name = localStorage.getItem('BJplayerName');
@@ -45,27 +48,27 @@
     mod = mod % 5;
     window.util.player.chips[0] = mod;
 
-    for (var i = 0; i < window.util.player.chips.length; i++) {
-      if (window.util.player.chips[i] > 0) {
-        var tr = 0;
-        for (var j = 0; j < window.util.player.chips[i]; j++) {
-          if (j % 10 === 0) {
-            var pile = window.util.createChipsPile(i);
-            tr = 0;
-            stack.appendChild(pile);
-          }
-          var chip = window.util.createChip(i);
-          chip.setAttribute('style', 'transform: translate(' + window.util.getRandomNumber(-1, 1) + 'px, ' + tr * -1 + 'px) rotate(' + window.util.getRandomNumber(-30, 30) + 'deg)');
-          pile.appendChild(chip);
-          tr++;
-        }
-      }
-    }
-    window.sortPiles(stack);
+     for (var i = 0; i < window.util.player.chips.length; i++) {
+       if (window.util.player.chips[i] > 0) {
+         var tr = 0;
+         for (var j = 0; j < window.util.player.chips[i]; j++) {
+           if (j % 10 === 0) {
+             var pile = window.util.createChipsPile(i);
+             tr = 0;
+             stack.appendChild(pile);
+           }
+           var chip = window.util.createChip(i);
+           chip.style.transform = 'translate(0px, ' + tr * -1 + 'px) rotate(' + window.util.getRandomNumber(-30, 30) + 'deg)';
+           pile.appendChild(chip);
+           tr++;
+         }
+       }
+     }
+     window.sortPiles(stack);
   };
 
   var formValidation = function () {
-    var DEPOSIT_MAX = 1000;
+    var DEPOSIT_MAX = 2000;
     var DEPOSIT_MIN = 1;
     if (gameSettings[1].value > DEPOSIT_MAX) {
       return 'Maximum $1000!';
@@ -78,8 +81,11 @@
 
   var onStartGamePress = function (evt) {
     evt.preventDefault();
-    window.util.hideElement(pageHeader, 300, 'opacity');
-    window.setTimeout(window.util.showElement, 300, table, 'opacity');
+    pageHeader.style.opacity = '0';
+    window.setTimeout(window.util.addClass, TIME, pageHeader, 'hide');
+    table.style.opacity = '0';
+    window.setTimeout(window.util.removeClass, TIME, table, 'hide');
+    window.setTimeout(window.util.setStyle, TIME + HOLD, table, 'opacity', '1');
     if(isStorageSupport) {
       localStorage.setItem('BJplayerName', gameSettings[0].value);
       localStorage.setItem('BJplayerMoney', gameSettings[1].value);
@@ -92,14 +98,17 @@
     chipsRack.textContent = 'Hello, ' + window.util.player.name + '!';
     playerMoney.textContent = window.util.player.money;
     window.newDeck(numOfDecks.value);
-    window.setTimeout(renderChipsInStack, 300);
+    window.setTimeout(renderChipsInStack, TIME);
     stack.addEventListener('click', window.onStackClick);
     stack.addEventListener('contextmenu', window.onStackContextClick);
   };
 
   var onNewGameButtonPress = function () {
-    window.util.hideElement(startGameSection, 300, 'opacity');
-    window.setTimeout(window.util.showElement, 300, settings, 'opacity');
+    startGameSection.style.opacity = '0';
+    window.setTimeout(window.util.addClass, TIME, startGameSection, 'hide');
+    settings.style.opacity = '0';
+    window.setTimeout(window.util.removeClass, TIME, settings, 'hide');
+    window.setTimeout(window.util.setStyle, TIME + HOLD, settings, 'opacity', '1');
     settingsForm.addEventListener('submit', onStartGamePress);
     gameSettings[1].addEventListener('input', function () {
       gameSettings[1].setCustomValidity(formValidation());

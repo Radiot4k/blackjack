@@ -1,26 +1,24 @@
 'use strict';
 (function () {
-  var moveChipOnBet = function (pileNumber) {
-    var piles = stack.querySelectorAll('.chips__pile--' + pileNumber);
-    var betCircle = document.querySelector('.bet__circle-stack');
-    var pileInBet = betCircle.querySelector('.chips__pile--' + pileNumber);
-    if (!pileInBet) {
-      pileInBet = window.util.createChipsPile(pileNumber);
-      betCircle.appendChild(pileInBet);
-    }
-    var rectPileInBet = pileInBet.getBoundingClientRect();
+  var TIME_TO_MOVE = 400;
+  var HOLD = 10;
+  var stack = document.querySelector('.player__stack');
+  var moveChipOnBet = function (chipNumber) {
+    var piles = stack.querySelectorAll('.chips__pile--' + chipNumber);
+    var betCircle = document.querySelector('.bet__circle');
+    var betCircleRect = betCircle.getBoundingClientRect();
     var chip = piles[piles.length - 1].lastChild;
-    var rectChip = chip.getBoundingClientRect();
-    var rotateDegEnd = window.util.getRandomNumber(-30, 30);
-    var translateXPxEnd = window.util.getRandomNumber(-1, 1);
-    var translateYPxEnd = pileInBet.children.length * -1;
-    var rotateDegStart = chip.style.transform.slice(chip.style.transform.indexOf('rotate'));
-    chip.remove();
-    chip.style.transform = 'translate(' + (rectChip.left - rectPileInBet.left) + 'px, ' + (rectChip.top - rectPileInBet.top) + 'px) ' + rotateDegStart;
-    pileInBet.appendChild(chip);
-    window.setTimeout(window.util.setTransform, TIME_TRANSFORM, chip, 'translate(' + translateXPxEnd + 'px,' + translateYPxEnd + 'px) rotate(' + rotateDegEnd + 'deg)');
+    var chipRect = chip.getBoundingClientRect();
 
-    window.sortPiles(betCircle);
+    chip.remove();
+    var x = chipRect.left - betCircleRect.left;
+    var y =chipRect.top - betCircleRect.top;
+    var deg = window.util.getRandomNumber(-30, 30);
+    chip.style.transform = 'translate(' + x + 'px, ' + y + 'px) rotate(' + deg + 'deg)';
+    betCircle.appendChild(chip);
+    var val = 'translate(0px, 0px) rotate(' + deg + 'deg)';
+    window.setTimeout(window.util.setStyle, HOLD, chip, 'transform', val);
+    //window.sortPiles(betCircle);
     window.sortPiles(stack);
   };
 
@@ -58,9 +56,9 @@
         break;
     }
     moveChipOnBet(pressedChip.classList.value.slice(-1));
-    var spanPlayerMoney = table.querySelector('.player__money span');
+    var spanPlayerMoney = document.querySelector('.player__money span');
     spanPlayerMoney.textContent = window.util.player.money;
-    var spanBetValue = table.querySelector('.bet__value span');
+    var spanBetValue = document.querySelector('.bet__value span');
     spanBetValue.textContent = window.util.player.bet;
   };
 

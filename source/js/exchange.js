@@ -1,10 +1,9 @@
 'use strict';
 
 (function () {
-  var TIME = 1000;
-  var TIME_TRANSFORM = 20;
+  var TIME = 600;
+  var HOLD = 10;
   var ROTATE_DEG = 180;
-  var HALF_OF_CHIP = 16;
 
   var body = document.querySelector('body');
   var modal = body.querySelector('.modal');
@@ -17,153 +16,178 @@
     var PILE_ADD;
     var AMOUNT_PLUS;
     var AMOUNT_MINUS;
+    var TIME_TO_MOVE = 400;
     var stack = document.querySelector('.player__stack');
     var chipRack = document.querySelector('.table__chip-rack');
-    var rectChipRack = chipRack.getBoundingClientRect();
-
-    var hideModalText = function () {
-      modalText.classList.add('hide');
-    };
+    var chipRackRect = chipRack.getBoundingClientRect();
+    var newChips = [];
+    var i;
+    var toSplit = false;
+    var toSplitNew = false;
+    var t = 2;
 
     modalText.textContent = 'Exchanging chips...';
+    modalText.style.opacity = '0';
     modalText.classList.remove('hide');
-    window.setTimeout(hideModalText, TIME * 2);
 
-    switch (pressedButton.classList[1]) {
-      case 'context-menu__button--1to5':
+    switch (pressedButton.name) {
+      case 'exchange-1to5':
         window.util.player.chips[0] -= 5;
         window.util.player.chips[1] += 1;
+        toSplit = true;
+        t = 6;
         PILE_REM = 0;
         AMOUNT_MINUS = 5;
         PILE_ADD = 1;
         AMOUNT_PLUS = 1;
         break;
-      case 'context-menu__button--5to1':
+      case 'exchange-5to1':
         window.util.player.chips[1] -= 1;
         window.util.player.chips[0] += 5;
+        toSplitNew = true;
         PILE_REM = 1;
         AMOUNT_MINUS = 1;
         PILE_ADD = 0;
         AMOUNT_PLUS = 5;
         break;
-      case 'context-menu__button--5to10':
+      case 'exchange-5to10':
         window.util.player.chips[1] -= 2;
         window.util.player.chips[2] += 1;
+        toSplit = true;
+        t = 6;
         PILE_REM = 1;
         AMOUNT_MINUS = 2;
         PILE_ADD = 2;
         AMOUNT_PLUS = 1;
         break;
-      case 'context-menu__button--5to25':
+      case 'exchange-5to25':
         window.util.player.chips[1] -= 5;
         window.util.player.chips[3] += 1;
+        toSplit = true;
+        t = 6;
         PILE_REM = 1;
         AMOUNT_MINUS = 5;
         PILE_ADD = 3;
         AMOUNT_PLUS = 1;
         break;
-      case 'context-menu__button--10to5':
+      case 'exchange-10to5':
         window.util.player.chips[2] -= 1;
         window.util.player.chips[1] += 2;
+        toSplitNew = true;
         PILE_REM = 2;
         AMOUNT_MINUS = 1;
         PILE_ADD = 1;
         AMOUNT_PLUS = 2;
         break;
-      case 'context-menu__button--10to5and25':
+      case 'exchange-10to5and25':
         window.util.player.chips[2] -= 3;
         window.util.player.chips[1] += 1;
         window.util.player.chips[3] += 1;
+        toSplit = true;
+        toSplitNew = true;
+        t = 6;
         PILE_REM = 2;
         AMOUNT_MINUS = 3;
-        PILE_ADD = 1;
-        AMOUNT_PLUS = 1;
-        for (i = 0; i < AMOUNT_PLUS; i++) {
-          window.setTimeout(window.util.addChipsInPile, TIME, stack, PILE_ADD, chipRack, ROTATE_DEG);
-        }
         PILE_ADD = 3;
+        AMOUNT_PLUS = 1;
+        newChips.splice(0, 0, window.util.createChip(PILE_ADD));
+        PILE_ADD = 1;
         break;
-      case 'context-menu__button--10to50':
+      case 'exchange-10to50':
         window.util.player.chips[2] -= 5;
         window.util.player.chips[4] += 1;
+        toSplit = true;
+        t = 6;
         PILE_REM = 2;
         AMOUNT_MINUS = 5;
         PILE_ADD = 4;
         AMOUNT_PLUS = 1;
         break;
-      case 'context-menu__button--25to5':
+      case 'exchange-25to5':
         window.util.player.chips[3] -= 1;
         window.util.player.chips[1] += 5;
+        toSplitNew = true;
         PILE_REM = 3;
         AMOUNT_MINUS = 1;
         PILE_ADD = 1;
         AMOUNT_PLUS = 5;
         break;
-      case 'context-menu__button--25to5and10':
+      case 'exchange-25to5and10':
         window.util.player.chips[3] -= 1;
         window.util.player.chips[1] += 1;
         window.util.player.chips[2] += 2;
+        toSplitNew = true;
         PILE_REM = 3;
         AMOUNT_MINUS = 1;
         PILE_ADD = 2;
         AMOUNT_PLUS = 2;
         for (i = 0; i < AMOUNT_PLUS; i++) {
-          window.setTimeout(window.util.addChipsInPile, TIME, stack, PILE_ADD, chipRack, ROTATE_DEG);
+          newChips.splice(0, 0, window.util.createChip(PILE_ADD));
         }
         PILE_ADD = 1;
         AMOUNT_PLUS = 1;
         break;
-      case 'context-menu__button--25to50':
+      case 'exchange-25to50':
         window.util.player.chips[3] -= 2;
         window.util.player.chips[4] += 1;
+        toSplit = true;
+        t = 6;
         PILE_REM = 3;
         AMOUNT_MINUS = 2;
         PILE_ADD = 4;
         AMOUNT_PLUS = 1;
         break;
-      case 'context-menu__button--25to100':
+      case 'exchange-25to100':
         window.util.player.chips[3] -= 4;
         window.util.player.chips[5] += 1;
+        toSplit = true;
+        t = 6;
         PILE_REM = 3;
         AMOUNT_MINUS = 4;
         PILE_ADD = 5;
         AMOUNT_PLUS = 1;
         break;
-      case 'context-menu__button--50to10':
+      case 'exchange-50to10':
         window.util.player.chips[4] -= 1;
         window.util.player.chips[2] += 5;
+        toSplitNew = true;
         PILE_REM = 4;
         AMOUNT_MINUS = 1;
         PILE_ADD = 2;
         AMOUNT_PLUS = 5;
         break;
-      case 'context-menu__button--50to25':
+      case 'exchange-50to25':
         window.util.player.chips[4] -= 1;
         window.util.player.chips[3] += 2;
+        toSplitNew = true;
         PILE_REM = 4;
         AMOUNT_MINUS = 1;
         PILE_ADD = 3;
         AMOUNT_PLUS = 2;
         break;
-      case 'context-menu__button--50to100':
+      case 'exchange-50to100':
         window.util.player.chips[4] -= 2;
         window.util.player.chips[5] += 1;
+        toSplit = true;
+        t = 6;
         PILE_REM = 4;
         AMOUNT_MINUS = 2;
         PILE_ADD = 5;
         AMOUNT_PLUS = 1;
         break;
-      case 'context-menu__button--100to25':
+      case 'exchange-100to25':
         window.util.player.chips[5] -= 1;
         window.util.player.chips[3] += 4;
+        toSplitNew = true;
         PILE_REM = 5;
         AMOUNT_MINUS = 1;
         PILE_ADD = 3;
         AMOUNT_PLUS = 4;
         break;
-      case 'context-menu__button--100to50':
+      case 'exchange-100to50':
         window.util.player.chips[5] -= 1;
         window.util.player.chips[4] += 2;
+        toSplitNew = true;
         PILE_REM = 5;
         AMOUNT_MINUS = 1;
         PILE_ADD = 4;
@@ -171,20 +195,68 @@
         break;
     }
 
-    window.count = 0;
-    window.intevalId = setInterval(window.util.removeChipsFromPile, 520, stack, PILE_REM, chipRack, ROTATE_DEG, AMOUNT_MINUS);
-    // for (var i = 0; i < AMOUNT_MINUS; i++) {
-    //   window.util.removeChipsFromPile(stack, PILE_REM, chipRack, ROTATE_DEG);
-    // }
-    var startAdd = function () {
-      window.countAdd = 0;
-      window.intevalIdAdd = setInterval(window.util.addChipsInPile, 520, stack, PILE_ADD, chipRack, ROTATE_DEG, AMOUNT_PLUS);
+    var chipsToExchange = window.util.selectChips(stack, PILE_REM, AMOUNT_MINUS);
+    var rulesRect = document.querySelector('.rules').getBoundingClientRect();
+    for (i = 0; i < chipsToExchange.length; i++) {
+      var coord = window.util.getCoordinatesToMove(chipsToExchange[i], rulesRect);
+      var deg = window.util.getRandomNumber(-30, 30);
+      chipsToExchange[i].style.transform = 'translate(' + coord.x + 'px, ' + (coord.y - i) + 'px) rotate(' + deg + 'deg)';
+      window.setTimeout(window.util.removeElement, TIME_TO_MOVE * (t + 1), chipsToExchange[i]);
+    }
+    if (toSplit) {
+      window.setTimeout(window.util.splitChips, TIME_TO_MOVE * 2, chipsToExchange, -1);
+      window.setTimeout(window.util.splitChips, TIME_TO_MOVE * 4, chipsToExchange, 1);
+    }
+
+    var moveToDealer = function (chips) {
+      for (var i = 0; i < chips.length; i++) {
+        coord = window.util.getCoordinatesToMove(chips[i], chipRackRect);
+        chips[i].style.transform = 'translate(' + coord.x + 'px, ' + (coord.y - chips[i].getBoundingClientRect().width) + 'px) rotate(' + ROTATE_DEG + 'deg)';
+      }
     };
+    window.setTimeout(moveToDealer, TIME_TO_MOVE * t, chipsToExchange);
+    window.setTimeout(window.util.checkPile, TIME_TO_MOVE * (t + 2), stack, PILE_REM);
 
-    window.setTimeout(startAdd, 520 * AMOUNT_MINUS);
+    for (i = 0; i < AMOUNT_PLUS; i++) {
+      newChips.splice(0, 0, window.util.createChip(PILE_ADD));
+    }
+    var setTransform = function (elem, i) {
+      coord = window.util.getCoordinatesToMove(elem, rulesRect);
+      deg = window.util.getRandomNumber(-30, 30);
+      elem.style.transform = 'translate(' + coord.x + 'px, ' + (coord.y - i) + 'px) rotate(' + deg + 'deg)';
+    };
+    for (i = 0; i < newChips.length; i++) {
+      window.setTimeout(window.util.addChipsInPile, TIME_TO_MOVE * (t + 2), newChips[i], stack, newChips[i].classList.value.slice(-1), chipRack, ROTATE_DEG);
+      window.setTimeout(setTransform, TIME_TO_MOVE * (t + 2), newChips[i], i);
+    }
+    if (toSplitNew) {
+      window.setTimeout(window.util.splitChips, TIME_TO_MOVE * (t + 4), newChips, -1);
+      window.setTimeout(window.util.splitChips, TIME_TO_MOVE * (t + 6), newChips, 1);
+      t = t + 8;
+    } else {
+      t = t + 4;
+    }
+    var moveToStack = function (chips) {
+      var q = 0;
+      var chipsLength = chips.length;
+      var parentElementChildrenLength = 0;
+      for (i = chips.length - 1; i >= 0; i--) {
+        if (parentElementChildrenLength !== chips[i].parentElement.children.length) {
+          parentElementChildrenLength = chips[i].parentElement.children.length;
+          chipsLength -= q;
+        }
+        q++;
+        var y = (chips[i].parentElement.children.length - chipsLength) * -1 - i;
+        deg = window.util.getRandomNumber(-30, 30);
+        chips[i].style.transform = 'translate(0px, ' + y + 'px) rotate(' + deg + 'deg)';
+      }
+      window.sortPiles(stack);
+    };
+    window.setTimeout(moveToStack, TIME_TO_MOVE * t, newChips);
+    window.setTimeout(window.util.setStyle, HOLD, modalText, 'opacity', '1');
+    window.setTimeout(window.util.setStyle, TIME_TO_MOVE * t, modalText, 'opacity', '0');
+    window.setTimeout(window.util.addClass, TIME_TO_MOVE * t + TIME, modalText, 'hide');
 
-    // window.util.removeChipsFromPile(stack, PILE_REM, AMOUNT_MINUS, rectChipRack, ROTATE_DEG);
-    // window.setTimeout(window.util.addChipsInPile, TIME, stack, PILE_ADD, AMOUNT_PLUS, rectChipRack, ROTATE_DEG);
   };
 
   var hideUnnecessary = function (contextMenu) {
@@ -245,16 +317,17 @@
       overlay.removeEventListener('click', onOverlayClick);
       modal.removeEventListener('click', onContextClick);
       document.removeEventListener('keydown', onOverlayEscPress);
-      window.util.hideElement(modal, 600, 'translateY');
-      window.util.hideElement(overlay, 600, 'opacity');
+      modal.removeAttribute('style');
+      window.setTimeout(window.util.addClass, TIME, modal, 'hide');
+      overlay.style.opacity = '0';
+      window.setTimeout(window.util.addClass, TIME, overlay, 'hide');
       for (var i = 1; i < context.children.length; i++) {
         if (!context.children[i].classList.contains('hide')) {
-          window.util.hideElement(context.children[i], 600);
+          window.setTimeout(window.util.addClass, TIME, context.children[i], 'hide');
           var buttons = context.children[i].querySelectorAll('.context-menu__button');
           for (var j = 0; j < buttons.length; j++) {
             if (buttons[j].classList.contains('hide')) {
-              //buttons[j].classList.remove('hide');
-              window.setTimeout(window.util.showElement, 600, buttons[j]);
+              window.setTimeout(window.util.removeClass, TIME, buttons[j], 'hide');
             }
           }
           break;
@@ -274,11 +347,15 @@
     };
 
     var pressedChip = window.util.findAncestor(evt.target, 'chip');
+
     if (pressedChip) {
       var contextMenu = modal.querySelector('.context-menu__' + pressedChip.classList.value.slice(-1));
       contextMenu.classList.remove('hide');
-      window.util.showElement(modal, 'translateY');
-      window.util.showElement(overlay, 'opacity');
+      modal.classList.remove('hide');
+      window.setTimeout(window.util.setStyle, HOLD, modal, 'transform', 'translateY(0)');
+      overlay.style.opacity = '0';
+      overlay.classList.remove('hide');
+      window.setTimeout(window.util.setStyle, HOLD, overlay, 'opacity', '1');
       hideUnnecessary(contextMenu);
       overlay.addEventListener('click', onOverlayClick);
       document.addEventListener('keydown', onOverlayEscPress);

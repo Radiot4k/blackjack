@@ -18,7 +18,7 @@
           <label class="form__label" for="player-name">Your name:</label>
           <input type="text" id="player-name" class="form__input" name="player-name" required>
           <label class="form__label" for="deposit">Initial deposit:</label>
-          <input type="number" id="deposit" class="form__input" name="deposit" min="1" max="1000" placeholder="maximum 1000" required>
+          <input type="number" id="deposit" class="form__input" name="deposit" min="1" max="2000" placeholder="maximum 1000" required>
           <fieldset class="form__fieldset">
             <legend class="form__legend">Number of decks:</legend>
             <ul class="form__list">
@@ -80,9 +80,7 @@
             <div class="bet__value">
               Bet: $<span>0</span>
             </div>
-            <div class="bet__circle">
-              <ul class="bet__circle-stack"></ul>
-            </div>
+            <ul class="bet__circle"></ul>
           </div>
         </div>
       </section>
@@ -105,7 +103,7 @@
         <p class="context-menu__title">Exchange chips:</p>
         <div class="context-menu__0 hide">
           <div class="context-menu__color-up">
-            <button class="context-menu__button context-menu__button--1to5" type="button" name="color-down-1to5">
+            <button class="context-menu__button context-menu__button--1to5" type="button" name="exchange-1to5">
               <div class="context-menu__pile">
                 <div class="chip chip--0 chip--context"></div>
                 <div class="chip chip--0 chip--context"></div>
@@ -120,7 +118,7 @@
         </div>
         <div class="context-menu__1 hide">
           <div class="context-menu__color-down">
-            <button class="context-menu__button context-menu__button--5to1" type="button" name="color-down-5to1">
+            <button class="context-menu__button context-menu__button--5to1" type="button" name="exchange-5to1">
               <div class="chip chip--1 chip--context"></div>
               <span></span>
               <div class="context-menu__pile">
@@ -133,7 +131,7 @@
             </button>
           </div>
           <div class="context-menu__color-up">
-            <button class="context-menu__button context-menu__button--5to10" type="button" name="color-down-5to10">
+            <button class="context-menu__button context-menu__button--5to10" type="button" name="exchange-5to10">
               <div class="context-menu__pile">
                 <div class="chip chip--1 chip--context"></div>
                 <div class="chip chip--1 chip--context"></div>
@@ -143,7 +141,7 @@
             </button>
           </div>
           <div class="context-menu__color-up">
-            <button class="context-menu__button context-menu__button--5to25" type="button" name="color-down-5to25">
+            <button class="context-menu__button context-menu__button--5to25" type="button" name="exchange-5to25">
               <div class="context-menu__pile">
                 <div class="chip chip--1 chip--context"></div>
                 <div class="chip chip--1 chip--context"></div>
@@ -158,7 +156,7 @@
         </div>
         <div class="context-menu__2 hide">
           <div class="context-menu__color-down">
-            <button class="context-menu__button context-menu__button--10to5" type="button" name="color-down-10to5">
+            <button class="context-menu__button context-menu__button--10to5" type="button" name="exchange-10to5">
               <div class="chip chip--2 chip--context"></div>
               <span></span>
               <div class="context-menu__pile">
@@ -168,7 +166,7 @@
             </button>
           </div>
           <div class="context-menu__color-up-down">
-            <button class="context-menu__button context-menu__button--10to5and25" type="button" name="color-down-10to5and25">
+            <button class="context-menu__button context-menu__button--10to5and25" type="button" name="exchange-10to5and25">
               <div class="context-menu__pile">
                 <div class="chip chip--2 chip--context"></div>
                 <div class="chip chip--2 chip--context"></div>
@@ -182,7 +180,7 @@
             </button>
           </div>
           <div class="context-menu__color-up">
-            <button class="context-menu__button context-menu__button--10to50" type="button" name="color-down-10to50">
+            <button class="context-menu__button context-menu__button--10to50" type="button" name="exchange-10to50">
               <div class="context-menu__pile">
                 <div class="chip chip--2 chip--context"></div>
                 <div class="chip chip--2 chip--context"></div>
@@ -197,7 +195,7 @@
         </div>
         <div class="context-menu__3 hide">
           <div class="context-menu__color-down">
-            <button class="context-menu__button context-menu__button--25to5" type="button" name="color-down-25to5">
+            <button class="context-menu__button context-menu__button--25to5" type="button" name="exchange-25to5">
               <div class="chip chip--3 chip--context"></div>
               <span></span>
               <div class="context-menu__pile">
@@ -210,7 +208,7 @@
             </button>
           </div>
           <div class="context-menu__color-down">
-            <button class="context-menu__button context-menu__button--25to5and10" type="button" name="color-down-25to5and10">
+            <button class="context-menu__button context-menu__button--25to5and10" type="button" name="exchange-25to5and10">
               <div class="chip chip--3 chip--context"></div>
               <span></span>
               <div class="context-menu__pile">
@@ -221,7 +219,7 @@
             </button>
           </div>
           <div class="context-menu__color-up">
-            <button class="context-menu__button context-menu__button--25to50" type="button" name="color-down-25to50">
+            <button class="context-menu__button context-menu__button--25to50" type="button" name="exchange-25to50">
               <div class="context-menu__pile">
                 <div class="chip chip--3 chip--context"></div>
                 <div class="chip chip--3 chip--context"></div>
@@ -231,7 +229,7 @@
             </button>
           </div>
           <div class="context-menu__color-up">
-            <button class="context-menu__button context-menu__button--25to100" type="button" name="color-down-25to100">
+            <button class="context-menu__button context-menu__button--25to100" type="button" name="exchange-25to100">
               <div class="context-menu__pile">
                 <div class="chip chip--3 chip--context"></div>
                 <div class="chip chip--3 chip--context"></div>
@@ -245,7 +243,7 @@
         </div>
         <div class="context-menu__4 hide">
           <div class="context-menu__color-down">
-            <button class="context-menu__button context-menu__button--50to10" type="button" name="color-down-50to10">
+            <button class="context-menu__button context-menu__button--50to10" type="button" name="exchange-50to10">
               <div class="chip chip--4 chip--context"></div>
               <span></span>
               <div class="context-menu__pile">
@@ -258,7 +256,7 @@
             </button>
           </div>
           <div class="context-menu__color-down">
-            <button class="context-menu__button context-menu__button--50to25" type="button" name="color-down-50to25">
+            <button class="context-menu__button context-menu__button--50to25" type="button" name="exchange-50to25">
               <div class="chip chip--4 chip--context"></div>
               <span></span>
               <div class="context-menu__pile">
@@ -268,7 +266,7 @@
             </button>
           </div>
           <div class="context-menu__color-up">
-            <button class="context-menu__button context-menu__button--50to100" type="button" name="color-down-50to100">
+            <button class="context-menu__button context-menu__button--50to100" type="button" name="exchange-50to100">
               <div class="context-menu__pile">
                 <div class="chip chip--4 chip--context"></div>
                 <div class="chip chip--4 chip--context"></div>
@@ -280,7 +278,7 @@
         </div>
         <div class="context-menu__5 hide">
           <div class="context-menu__color-down">
-            <button class="context-menu__button context-menu__button--100to25" type="button" name="color-down-100to25">
+            <button class="context-menu__button context-menu__button--100to25" type="button" name="exchange-100to25">
               <div class="chip chip--5 chip--context"></div>
               <span></span>
               <div class="context-menu__pile">
@@ -292,7 +290,7 @@
             </button>
           </div>
           <div class="context-menu__color-down">
-            <button class="context-menu__button context-menu__button--100to50" type="button" name="color-down-100to50">
+            <button class="context-menu__button context-menu__button--100to50" type="button" name="exchange-100to50">
               <div class="chip chip--5 chip--context"></div>
               <span></span>
               <div class="context-menu__pile">
