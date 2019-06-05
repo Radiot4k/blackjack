@@ -1,9 +1,11 @@
 'use strict';
 
 (function () {
-  var TIME = 300;
+  var TIME = 400;
   var HOLD = 10;
+  var INIT_DEPOSIT = 500;
   var pageHeader = document.querySelector('.page-header');
+  var title = pageHeader.querySelector('.page-header__title');
   var startGameSection = pageHeader.querySelector('.start-game');
   var buttons = startGameSection.querySelectorAll('.button--new-game, .button--continue');
   var newGameButton = buttons[0];
@@ -11,108 +13,142 @@
   var settings = pageHeader.querySelector('.settings');
   var settingsForm = settings.querySelector('.settings__form');
   var gameSettings = settingsForm.querySelectorAll('#player-name, #deposit');
+  var gameNumOfDecks = settingsForm.querySelectorAll('.form__radio');
   var table = document.querySelector('.table');
   var chipsRack = table.querySelector('.table__chip-rack');
   var stack = table.querySelector('.player__stack');
   var playerMoney = table.querySelector('.player__money span');
   var isStorageSupport = true;
   var storPlayer = {};
-  var method = {};
 
   try {
     storPlayer.name = localStorage.getItem('BJplayerName');
     storPlayer.money = localStorage.getItem('BJplayerMoney');
+    storPlayer.decks = localStorage.getItem('BJplayeDecks');
   } catch (err) {
     isStorageSupport = false;
   }
 
-  if (!storPlayer.name || !storPlayer.money) {
+  if (!storPlayer.name || !storPlayer.money || !storPlayer.decks) {
     continueButton.classList.add('hide');
   } else {
     continueButton.textContent = 'Continue as ' + storPlayer.name;
     gameSettings[0].value = storPlayer.name;
     gameSettings[1].value = storPlayer.money;
+    for (var a = 0; a < gameNumOfDecks.length; a++) {
+      if (gameNumOfDecks[a].value === storPlayer.decks) {
+        gameNumOfDecks[a].setAttribute('checked', 'checked');
+        break;
+      }
+    }
   }
 
   var renderChipsInStack = function () {
-    var mod;
-    window.util.player.chips[5] = Math.floor(window.util.player.money / 100);
-    mod = window.util.player.money % 100;
-    window.util.player.chips[4] = Math.floor(mod / 50);
+    var mod = window.util.player.money;
+    while (window.util.player.chips[0] < 5 && mod > 0) {
+      window.util.player.chips[0] += 1;
+      mod -= 1;
+    }
+    while (window.util.player.chips[1] < 5 && mod >= 5) {
+      window.util.player.chips[1] += 1;
+      mod -= 5;
+    }
+    while (window.util.player.chips[2] < 5 && mod >= 10) {
+      window.util.player.chips[2] += 1;
+      mod -= 10;
+    }
+    while (window.util.player.chips[3] < 5 && mod >= 25) {
+      window.util.player.chips[3] += 1;
+      mod -= 25;
+    }
+    while (window.util.player.chips[4] < 5 && mod >= 50) {
+      window.util.player.chips[4] += 1;
+      mod -= 50;
+    }
+    while (window.util.player.chips[5] < 5 && mod >= 100) {
+      window.util.player.chips[5] += 1;
+      mod -= 100;
+    }
+    window.util.player.chips[5] += Math.floor(mod / 100);
+    mod = mod % 100;
+    window.util.player.chips[4] += Math.floor(mod / 50);
     mod = mod % 50;
-    window.util.player.chips[3] = Math.floor(mod / 25);
+    window.util.player.chips[3] += Math.floor(mod / 25);
     mod = mod % 25;
-    window.util.player.chips[2] = Math.floor(mod / 10);
+    window.util.player.chips[2] += Math.floor(mod / 10);
     mod = mod % 10;
-    window.util.player.chips[1] = Math.floor(mod / 5);
+    window.util.player.chips[1] += Math.floor(mod / 5);
     mod = mod % 5;
-    window.util.player.chips[0] = mod;
+    window.util.player.chips[0] += mod;
 
-     for (var i = 0; i < window.util.player.chips.length; i++) {
-       if (window.util.player.chips[i] > 0) {
-         var tr = 0;
-         for (var j = 0; j < window.util.player.chips[i]; j++) {
-           if (j % 10 === 0) {
-             var pile = window.util.createChipsPile(i);
-             tr = 0;
-             stack.appendChild(pile);
-           }
-           var chip = window.util.createChip(i);
-           chip.style.transform = 'translate(0px, ' + tr * -1 + 'px) rotate(' + window.util.getRandomNumber(-30, 30) + 'deg)';
-           pile.appendChild(chip);
-           tr++;
+    for (var i = 0; i < window.util.player.chips.length; i++) {
+      if (window.util.player.chips[i] > 0) {
+        for (var j = 0; j < window.util.player.chips[i]; j++) {
+          if (j % 10 === 0) {
+            var pile = window.util.createChipsPile(i);
+            stack.appendChild(pile);
+          }
+          var chip = window.util.createChip(i);;
+          pile.appendChild(chip);
+          window.util.setTabindex(pile);
          }
        }
      }
-     window.sortPiles(stack);
-  };
-
-  var formValidation = function () {
-    var DEPOSIT_MAX = 2000;
-    var DEPOSIT_MIN = 1;
-    if (gameSettings[1].value > DEPOSIT_MAX) {
-      return 'Maximum $1000!';
-    }
-    if (gameSettings[1].value < DEPOSIT_MIN) {
-      return 'Minimum $1!'
-    }
-    return '';
   };
 
   var onStartGamePress = function (evt) {
     evt.preventDefault();
-    pageHeader.style.opacity = '0';
+    var body = document.querySelector('.body');
+    var numOfDecks = settingsForm.querySelector('.form__radio:checked');
+    pageHeader.classList.remove('opacity-1');
     window.setTimeout(window.util.addClass, TIME, pageHeader, 'hide');
-    table.style.opacity = '0';
+    window.setTimeout(window.util.addClass, TIME, body, 'body--brown');
     window.setTimeout(window.util.removeClass, TIME, table, 'hide');
-    window.setTimeout(window.util.setStyle, TIME + HOLD, table, 'opacity', '1');
     if(isStorageSupport) {
       localStorage.setItem('BJplayerName', gameSettings[0].value);
       localStorage.setItem('BJplayerMoney', gameSettings[1].value);
+      localStorage.setItem('BJplayeDecks', numOfDecks.value);
     }
     window.util.player.name = gameSettings[0].value;
     window.util.player.money = gameSettings[1].value;
     window.util.dealer.cards = [];
     window.util.player.cards = [];
-    var numOfDecks = settingsForm.querySelector('.form__radio:checked');
-    chipsRack.textContent = 'Hello, ' + window.util.player.name + '!';
+    chipsRack.textContent = 'Welcome, ' + window.util.player.name + '!';
     playerMoney.textContent = window.util.player.money;
-    window.newDeck(numOfDecks.value);
+    window.setTimeout(window.newDeck, TIME, numOfDecks.value);
     window.setTimeout(renderChipsInStack, TIME);
-    stack.addEventListener('click', window.onStackClick);
-    stack.addEventListener('contextmenu', window.onStackContextClick);
+    var timeoutID;
+    window.onStackTap = function (evt) {
+      evt.preventDefault();
+      timeoutID = window.setTimeout(window.onStackContextClick, 700, evt);
+    };
+    window.onStackTapEnd = function (evt) {
+      evt.preventDefault();
+      window.clearTimeout(timeoutID);
+      window.onStackClick(evt);
+    };
+    var onStackEnterPress = function (evt) {
+      window.util.isEnterEvent(evt, window.onStackClick, window.onStackContextClick);
+    };
+    var stackClickEvent = function () {
+      stack.addEventListener('click', window.onStackClick);
+      stack.addEventListener('contextmenu', window.onStackContextClick);
+      stack.addEventListener('touchstart', window.onStackTap);
+      stack.addEventListener('touchend', window.onStackTapEnd);
+      stack.addEventListener('keydown', onStackEnterPress);
+    };
+    window.setTimeout(stackClickEvent, 4500);
   };
 
   var onNewGameButtonPress = function () {
-    startGameSection.style.opacity = '0';
+    startGameSection.classList.remove('opacity-1');
     window.setTimeout(window.util.addClass, TIME, startGameSection, 'hide');
-    settings.style.opacity = '0';
     window.setTimeout(window.util.removeClass, TIME, settings, 'hide');
-    window.setTimeout(window.util.setStyle, TIME + HOLD, settings, 'opacity', '1');
+    window.setTimeout(window.util.addClass, TIME + HOLD, settings, 'opacity-1');
+    title.classList.add('page-header__title--opacity');
+    window.setTimeout(window.util.removeClass, TIME * 2, title, 'page-header__title--opacity');
+    gameSettings[1].value = INIT_DEPOSIT;
     settingsForm.addEventListener('submit', onStartGamePress);
-    gameSettings[1].addEventListener('input', function () {
-      gameSettings[1].setCustomValidity(formValidation());
-    });
   };
 
   newGameButton.addEventListener('click', onNewGameButtonPress);

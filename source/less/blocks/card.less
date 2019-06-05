@@ -1,0 +1,551 @@
+.card {
+  box-sizing: border-box;
+  position: absolute;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 48px;
+  height: 72px;
+
+  background-color: #2f6aa8;
+  background-image: url("../img/shirt-optim.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  // background-color: #ffffff;
+  // background-image:
+  //   linear-gradient(135deg, #e11d0e 25%, transparent 25%),
+  //   linear-gradient(225deg, #e11d0e 26%, transparent 26%),
+  //   linear-gradient(45deg, #e11d0e 25%, transparent 25%),
+  //   linear-gradient(315deg, #e11d0e 26%, transparent 26%);
+  // background-size: 2px 2px;
+  border: 2px solid white;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(90, 90, 90, 0.3);
+  transition: transform @duration ease;
+  overflow: hidden;
+
+  & span:nth-child(1)::after,
+  & span:nth-child(4)::after {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  &--shuffle:nth-child(1) {
+    animation: card-yellow-shuffle 4s ease;
+  }
+
+  &--shuffle:nth-child(2) {
+    animation: card0-shuffle 4s ease;
+  }
+
+  &--shuffle:nth-child(3) {
+    animation: card-shuffle 4s ease;
+  }
+
+  &--shuffle:nth-child(4) {
+    animation: card2-shuffle 4s ease;
+  }
+
+  &--open {
+    background-color: #ffffff;
+    animation-name: open-card, show-card;
+    animation-duration: @duration, @duration / 2;
+    animation-timing-function: linear, step-start;
+    animation-fill-mode: forwards, forwards;
+    animation-delay: 0s, @duration / 2;
+  }
+
+  &--yellow {
+    background-color: yellow;
+    background-image: none;
+    border-color: yellow;
+  }
+
+  & span:nth-child(4)::after {
+    transform: rotate(180deg);
+  }
+
+  & span {
+    position: absolute;
+
+    width: 11px;
+    height: 12px;
+
+    transform: translateX(200px);
+
+    &.span--show {
+      animation-name: show-card-span;
+      animation-duration: @duration / 2;
+      animation-timing-function: step-start;
+      animation-fill-mode: forwards;
+      animation-delay: @duration / 2;
+    }
+
+    &:first-child {
+      top: 0;
+      left: 0;
+    }
+
+    &:nth-child(2) {
+      top: 13px;
+      left: 0;
+    }
+
+    &:nth-child(3) {
+      right: 0;
+      bottom: 13px;
+    }
+
+    &:nth-child(4) {
+      right: 0;
+      bottom: 0;
+    }
+
+    &:last-child {
+      position: static;
+
+      width: 18px;
+      height: 40px;
+    }
+  }
+}
+
+.card--spades {
+  color: black;
+
+  & span:nth-child(2)::after,
+  & span:nth-child(3)::after {
+    content: "";
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    background-image: url("../img/my-spade.svg");
+    background-size: auto;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  & span:nth-child(3)::after {
+    transform: rotate(180deg);
+  }
+}
+
+.card--diamonds {
+  color: red;
+
+  & span:nth-child(2)::after,
+  & span:nth-child(3)::after {
+    content: "";
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    background-image: url("../img/my-diamond.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  & span:nth-child(3)::after {
+    transform: rotate(180deg);
+  }
+}
+
+.card--hearts {
+  color: red;
+
+  & span:nth-child(2)::after,
+  & span:nth-child(3)::after {
+    content: "";
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    background-image: url("../img/my-heart.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  & span:nth-child(3)::after {
+    transform: rotate(180deg);
+  }
+}
+
+.card--clubs {
+  color: black;
+
+  & span:nth-child(2)::after,
+  & span:nth-child(3)::after {
+    content: "";
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    background-image: url("../img/my-clubs.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  & span:nth-child(3)::after {
+    transform: rotate(180deg);
+  }
+}
+
+.card--2 {
+  & span:nth-child(1)::after,
+  & span:nth-child(4)::after {
+    content: "2";
+  }
+
+  & span:last-child {
+    background-repeat: no-repeat;
+    background-position: top center, bottom center;
+    background-size: 6px;
+  }
+
+  &.card--spades span:last-child {
+    background-image: url("../img/my-spade.svg"), url("../img/my-spade.svg");
+  }
+
+  &.card--diamonds span:last-child {
+    background-image: url("../img/my-diamond.svg"), url("../img/my-diamond.svg");
+  }
+
+  &.card--hearts span:last-child {
+    background-image: url("../img/my-heart.svg"), url("../img/my-heart.svg");
+  }
+
+  &.card--clubs span:last-child {
+    background-image: url("../img/my-clubs.svg"), url("../img/my-clubs.svg");
+  }
+}
+
+.card--3 {
+  & span:nth-child(1)::after,
+  & span:nth-child(4)::after {
+    content: "3";
+  }
+
+  & span:last-child {
+    background-repeat: no-repeat;
+    background-position: top center, center center, bottom center;
+    background-size: 6px;
+  }
+
+  &.card--spades span:last-child {
+    background-image: url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg");
+  }
+
+  &.card--diamonds span:last-child {
+    background-image: url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg");
+  }
+
+  &.card--hearts span:last-child {
+    background-image: url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg");
+  }
+
+  &.card--clubs span:last-child {
+    background-image: url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg");
+  }
+}
+
+.card--4 {
+  & span:nth-child(1)::after,
+  & span:nth-child(4)::after {
+    content: "4";
+  }
+
+  & span:last-child {
+    background-repeat: no-repeat;
+    background-position: top left, bottom left, top right, bottom right;
+    background-size: 6px;
+  }
+
+  &.card--spades span:last-child {
+    background-image: url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg");
+  }
+
+  &.card--diamonds span:last-child {
+    background-image: url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg");
+  }
+
+  &.card--hearts span:last-child {
+    background-image: url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg");
+  }
+
+  &.card--clubs span:last-child {
+    background-image: url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg");
+  }
+}
+
+.card--5 {
+  & span:nth-child(1)::after,
+  & span:nth-child(4)::after {
+    content: "5";
+  }
+
+  & span:last-child {
+    background-repeat: no-repeat;
+    background-position: top left, bottom left, top right, bottom right, center center;
+    background-size: 6px;
+  }
+
+  &.card--spades span:last-child {
+    background-image: url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg");
+  }
+
+  &.card--diamonds span:last-child {
+    background-image: url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg");
+  }
+
+  &.card--hearts span:last-child {
+    background-image: url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg");
+  }
+
+  &.card--clubs span:last-child {
+    background-image: url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg");
+  }
+}
+
+.card--6 {
+  & span:nth-child(1)::after,
+  & span:nth-child(4)::after {
+    content: "6";
+  }
+
+  & span:last-child {
+    background-repeat: no-repeat;
+    background-position: top left, bottom left, top right, bottom right, center left, center right;
+    background-size: 6px;
+  }
+
+  &.card--spades span:last-child {
+    background-image: url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg");
+  }
+
+  &.card--diamonds span:last-child {
+    background-image: url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg");
+  }
+
+  &.card--hearts span:last-child {
+    background-image: url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg");
+  }
+
+  &.card--clubs span:last-child {
+    background-image: url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg");
+  }
+}
+
+.card--7 {
+  & span:nth-child(1)::after,
+  & span:nth-child(4)::after {
+    content: "7";
+  }
+
+  & span:last-child {
+    background-repeat: no-repeat;
+    background-position: top left, bottom left, top right, bottom right, center left, center right, center 25%;
+    background-size: 6px;
+  }
+
+  &.card--spades span:last-child {
+    background-image: url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg");
+  }
+
+  &.card--diamonds span:last-child {
+    background-image: url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg");
+  }
+
+  &.card--hearts span:last-child {
+    background-image: url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg");
+  }
+
+  &.card--clubs span:last-child {
+    background-image: url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg");
+  }
+}
+
+.card--8 {
+  & span:nth-child(1)::after,
+  & span:nth-child(4)::after {
+    content: "8";
+  }
+
+  & span:last-child {
+    background-repeat: no-repeat;
+    background-position: top left, bottom left, top right, bottom right, center left, center right, center 25%, center 75%;
+    background-size: 6px;
+  }
+
+  &.card--spades span:last-child {
+    background-image: url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg");
+  }
+
+  &.card--diamonds span:last-child {
+    background-image: url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg");
+  }
+
+  &.card--hearts span:last-child {
+    background-image: url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg");
+  }
+
+  &.card--clubs span:last-child {
+    background-image: url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg");
+  }
+}
+
+.card--9 {
+  & span:nth-child(1)::after,
+  & span:nth-child(4)::after {
+    content: "9";
+  }
+
+  & span:last-child {
+    background-repeat: no-repeat;
+    background-position: top left, bottom left, top right, bottom right, left 32%, right 32%, left 68%, right 68%, center center;
+    background-size: 6px;
+  }
+
+  &.card--spades span:last-child {
+    background-image: url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg");
+  }
+
+  &.card--diamonds span:last-child {
+    background-image: url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg");
+  }
+
+  &.card--hearts span:last-child {
+    background-image: url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg");
+  }
+
+  &.card--clubs span:last-child {
+    background-image: url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg");
+  }
+}
+
+.card--10 {
+  & span:nth-child(1)::after,
+  & span:nth-child(4)::after {
+    content: "10";
+  }
+
+  & span:last-child {
+    background-repeat: no-repeat;
+    background-position: top left, bottom left, top right, bottom right, left 35%, right 35%, left 65%, right 65%, center 18%, center 82%;
+    background-size: 6px;
+  }
+
+  &.card--spades span:last-child {
+    background-image: url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg"), url("../img/my-spade.svg");
+  }
+
+  &.card--diamonds span:last-child {
+    background-image: url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg"), url("../img/my-diamond.svg");
+  }
+
+  &.card--hearts span:last-child {
+    background-image: url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg"), url("../img/my-heart.svg");
+  }
+
+  &.card--clubs span:last-child {
+    background-image: url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg"), url("../img/my-clubs.svg");
+  }
+}
+
+.card--J {
+  & span:nth-child(1)::after,
+  & span:nth-child(4)::after {
+    content: "J";
+  }
+
+  & span:last-child {
+    width: 38px;
+
+    background-image: url("../img/jack.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 40px;
+  }
+}
+
+.card--Q {
+  & span:nth-child(1)::after,
+  & span:nth-child(4)::after {
+    content: "Q";
+  }
+
+  & span:last-child {
+    width: 38px;
+
+    background-image: url("../img/queen.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 40px;
+  }
+}
+
+.card--K {
+  & span:nth-child(1)::after,
+  & span:nth-child(4)::after {
+    content: "K";
+  }
+
+  & span:last-child {
+    width: 38px;
+
+    background-image: url("../img/king.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 40px;
+  }
+}
+
+.card--A {
+  & span:nth-child(1)::after,
+  & span:nth-child(4)::after {
+    content: "A";
+  }
+
+  & span:last-child {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+
+  &.card--spades span:last-child {
+    background-image: url("../img/my-spade.svg");
+  }
+
+  &.card--diamonds span:last-child {
+    background-image: url("../img/my-diamond.svg");
+  }
+
+  &.card--hearts span:last-child {
+    background-image: url("../img/my-heart.svg");
+  }
+
+  &.card--clubs span:last-child {
+    background-image: url("../img/my-clubs.svg");
+  }
+}

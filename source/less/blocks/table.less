@@ -1,56 +1,52 @@
 .table {
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+  max-width: 1440px;
 
-  transition: opacity 0.3s ease;
-}
+  &::before {
+    content: "";
 
-.table__top {
-  box-sizing: border-box;
-  position: absolute;
+    position: absolute;
+    bottom: 0;
+    z-index: -1;
 
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+    display: block;
+    width: 1440px;
+    height: 100%;
 
-  width: 100vw;
-}
-
-.table__middle {
-  box-sizing: border-box;
-
-  position: absolute;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  width: 100vw;
-  height: 100vh;
+    background-image: @background;
+    border: 50px solid #3c1313;
+    border-top-width: 10px;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+    box-shadow: inset 0 0 10px 0 #000000;
+  }
 }
 
 .table__bottom {
   box-sizing: border-box;
+
   position: absolute;
-  bottom: 10px;
+  bottom: 0;
 
   width: 100%;
-  padding: 0 10px;
+  height: 55px;
+  padding: 0;
 }
 
 .table__chip-rack {
-  margin: 0 auto;
+  position: absolute;
+
+  margin: auto 0;
   padding: 0 10px;
 
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 400;
   color: #000000;
-  text-align: center;
   text-transform: capitalize;
 
   background-color: #fbffc3;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-radius: 5px;
 }
 
 .table__shoe {
@@ -58,39 +54,38 @@
   top: 0;
   right: 0;
 
-  display: flex;
-  align-items: flex-end;
-
-  width: 66px;
-  height: 132px;
+  width: 52px;
+  height: 76px;
 
   background-color: #000000;
   background-image: radial-gradient(rgba(255, 255, 255, 0.3), transparent);
   border-radius: 5px;
+  transform: rotate(-45deg);
+}
 
-  transform: translate(50%, -50%) rotate(45deg);
+.table__shoe-cover {
+  position: absolute;
+  top: 0;
+  right: -25px;
+  z-index: 100;
 
-  &::before {
-    content: "";
-    z-index: 10;
+  display: block;
 
-    display: block;
+  width: 76px;
+  height: 76px;
 
-    width: 100%;
-    height: 100%;
-
-    background-image: url("../img/shoe.png");
-    background-repeat: no-repeat;
-    background-size: 60px;
-    background-position: bottom;
-    transform: translateY(-10px);
-  }
+  background-image: url("../img/shoe.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+  transform: rotate(45deg) translateY(-17%);
+  transform-origin: center 25px;
 
   &::after {
     content: "SHOE";
 
     position: absolute;
-    bottom: 32px;
+    bottom: 25px;
     z-index: 10;
 
     width: 100%;
@@ -106,3 +101,10 @@
   flex-direction: column;
   align-items: center;
 }
+
+// @media (max-height: @mobile-height) {
+//   .table__bottom {
+//     position: absolute;
+//     bottom: 0;
+//   }
+// }

@@ -9,7 +9,40 @@
   max-width: 400px;
   margin: auto;
 
-  transition: opacity 0.3s ease;
+  background-image: url("../img/my-spade.svg"), url("../img/my-diamond.svg"), url("../img/my-heart.svg"), url("../img/my-clubs.svg");
+  background-repeat: no-repeat;
+  background-size: 20px;
+  background-position: 10% top, 10% bottom, 90% top, 90% bottom;
+  transition: opacity @duration ease-out;
+  opacity: 0;
+
+  & .card {
+    z-index: -1;
+
+    &:nth-child(1) {
+      top: 0;
+      right: 0;
+      transform: rotate(45deg);
+    }
+
+    &:nth-child(2) {
+      top: 0;
+      left: 0;
+      transform: rotate(-45deg);
+    }
+
+    &:nth-child(3) {
+      bottom: 0;
+      left: 0;
+      transform: rotate(45deg);
+    }
+
+    &:nth-child(4) {
+      bottom: 0;
+      right: 0;
+      transform: rotate(-45deg);
+    }
+  }
 }
 
 .page-header__title {
@@ -18,7 +51,13 @@
   font-size: 40px;
   color: gold;
   letter-spacing: 1px;
-  text-shadow: 0 4px 10px #000;
+  text-shadow: 0 1px 1px #000;
+
+  &--opacity {
+    animation: opacity @duration ease;
+    animation-direction: alternate-reverse;
+    animation-iteration-count: 2;
+  }
 }
 
 .page-header__settings {

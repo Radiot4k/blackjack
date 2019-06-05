@@ -1,14 +1,26 @@
 'use strict';
 
 window.util = (function () {
-  var ESC_KEYCODE = 27;
-  var HALF_OF_CHIP = 16;
-  var TIME_TRANSFORM = 20;
+  var ESC_KEY = 'Escape'; //27
+  var ENTER_KEY = 'Enter'; //13
 
   return {
     isEscEvent: function (evt, action) {
-      if (evt.keyCode === ESC_KEYCODE) {
+      if (evt.key === 'Escape') {
         action();
+      }
+    },
+    isEnterEvent: function (evt, action1, action2) {
+      if (evt.key === 'Enter' && !evt.altKey) {
+        action1(evt);
+      }
+      if (evt.key === 'Enter' && evt.altKey) {
+        action2(evt);
+      }
+    },
+    isAltEnterEvent: function (evt, action) {
+      if (evt.key === 'Enter' && evt.altKey) {
+        action(evt);
       }
     },
     Chips: [{
@@ -91,6 +103,7 @@ window.util = (function () {
     getCoordinatesToMove: function (element, toParentRect) {
       var elementTransform = element.style.transform;
       var elementRect = element.getBoundingClientRect();
+      //var elementParentRect = element.parentElement.getBoundingClientRect();
       var coord = {};
       coord.x = toParentRect.left - elementRect.left + toParentRect.width / 2 - elementRect.width / 2 + parseInt(elementTransform.slice(10, elementTransform.indexOf('px')), 10);
       coord.y = toParentRect.top - elementRect.top + parseInt(elementTransform.slice(elementTransform.indexOf(',') + 2, elementTransform.indexOf('px', elementTransform.indexOf(','))), 10);
@@ -101,24 +114,24 @@ window.util = (function () {
         var elemTransform = elements[i].style.transform;
         var x = elemTransform.slice(10, elemTransform.indexOf('px')) - (20 * i * k);
         var y = elemTransform.slice(elemTransform.indexOf(',') + 2, elemTransform.indexOf('px', elemTransform.indexOf(','))) - (i * k);
-        var deg = elemTransform.slice(elemTransform.indexOf('rotate(') + 7, elemTransform.indexOf('deg'));
-        elements[i].style.transform = 'translate(' + x + 'px, ' + y + 'px) rotate(' + deg + 'deg)';
+        elements[i].style.transform = 'translate(' + x + 'px, ' + y + 'px)';
       }
     },
-    assembleChips: function (elements) {
-      for (var i = 0; i < elements.length; i++) {
-        var elemTransform = elements[i].style.transform;
-        var x = elemTransform.slice(10, elemTransform.indexOf('px')) - 20 * i;
-        var y = elemTransform.slice(elemTransform.indexOf(',') + 2, elemTransform.indexOf('px', elemTransform.indexOf(','))) - i;
-        var deg = window.util.getRandomNumber(-30, 30);
-        elements[i].style.transform = 'translate(' + x + 'px, ' + y + 'px) rotate(' + deg + 'deg)';
-      }
-    },
+    // assembleChips: function (elements) {
+    //   for (var i = 0; i < elements.length; i++) {
+    //     var elemTransform = elements[i].style.transform;
+    //     var x = elemTransform.slice(10, elemTransform.indexOf('px')) - 20 * i;
+    //     var y = elemTransform.slice(elemTransform.indexOf(',') + 2, elemTransform.indexOf('px', elemTransform.indexOf(','))) - i;
+    //     var deg = window.util.getRandomNumber(-30, 30);
+    //     elements[i].style.transform = 'translate(' + x + 'px, ' + y + 'px) rotate(' + deg + 'deg)';
+    //   }
+    // },
     checkPile: function (parent, pileNumber) {
       var piles = parent.querySelectorAll('.chips__pile--' + pileNumber);
       if (piles[piles.length - 1].children.length === 0) {
         piles[piles.length - 1].remove();
-        //window.sortPiles(parent);
+      } else {
+        window.util.setTabindex(piles[piles.length - 1]);
       }
     },
     findNeighbor: function (parent, pileNumber) {
@@ -136,33 +149,29 @@ window.util = (function () {
       }
       return neighbor;
     },
-    addChipsInPile: function (chipToAdd, toParent, pileNumber, fromParent, rotateDeg) {
-      var piles = toParent.querySelectorAll('.chips__pile--' + pileNumber);
-
-      var pastePile = function () {
-        var pilesAll = toParent.querySelectorAll('.chips__pile');
-        var pileNeighbor = window.util.findNeighbor(toParent, pileNumber);
-        var pile = window.util.createChipsPile(pileNumber);
-        switch (pileNeighbor.pos) {
-          case 'current':
-            pileNeighbor.val.after(pile);
-            break;
-          case 'next':
-            pileNeighbor.val.before(pile);
-        }
-        piles = toParent.querySelectorAll('.chips__pile--' + pileNumber);
-      };
-
-      if (piles.length === 0 || piles[piles.length - 1].children.length === 10) {
-        pastePile();
+    pastePile: function (toParent, pileNumber) {
+      var pilesAll = toParent.querySelectorAll('.chips__pile');
+      var pileNeighbor = window.util.findNeighbor(toParent, pileNumber);
+      var pile = window.util.createChipsPile(pileNumber);
+      switch (pileNeighbor.pos) {
+        case 'current':
+          pileNeighbor.val.after(pile);
+          break;
+        case 'next':
+          pileNeighbor.val.before(pile);
+          break;
+        default:
+          toParent.appendChild(pile);
       }
-      var pileRect = piles[piles.length - 1].getBoundingClientRect();
-      var fromParentRect = fromParent.getBoundingClientRect();
-      var x = fromParentRect.left - pileRect.left + fromParentRect.width / 2 - pileRect.width / 2;
-      var y = fromParentRect.top - pileRect.top;
-      var deg = rotateDeg;
-      chipToAdd.style.transform = 'translate(' + x + 'px, ' + y + 'px) rotate(' + deg + 'deg)';
+    },
+    addChipInPile: function (chipToAdd, toParent, pileNumber) {
+      var piles = toParent.querySelectorAll('.chips__pile--' + pileNumber);
+      if (piles.length === 0 || piles[piles.length - 1].children.length === 10) {
+        window.util.pastePile(toParent, pileNumber);
+        piles = toParent.querySelectorAll('.chips__pile--' + pileNumber);
+      }
       piles[piles.length - 1].appendChild(chipToAdd);
+      window.util.setTabindex(piles[piles.length - 1]);
     },
     hideElement: function (elem, time, method) {
       switch (method.name) {
@@ -193,6 +202,20 @@ window.util = (function () {
     },
     removeElement: function (element) {
       element.remove();
+    },
+    removeAttr: function (element, attr) {
+      element.removeAttribute(attr);
+    },
+    toggleClass: function (element, className) {
+      element.classList.toggle(className);
+    },
+    setTabindex: function (parent) {
+      var chips = parent.querySelectorAll('.chip');
+      var lastChip = parent.querySelector('.chip:last-child');
+      for (var i = 0; i < chips.length; i++) {
+        chips[i].removeAttribute('tabindex');
+      }
+      lastChip.setAttribute('tabindex', '1');
     }
   };
 })();

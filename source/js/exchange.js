@@ -1,17 +1,17 @@
 'use strict';
 
 (function () {
-  var TIME = 600;
+  var TIME = 500;
   var HOLD = 10;
-  var ROTATE_DEG = 180;
 
-  var body = document.querySelector('body');
-  var modal = body.querySelector('.modal');
-  var overlay = body.querySelector('.modal-overlay');
+  var modal = document.querySelector('.modal');
+  var overlayModal = document.querySelector('.modal-overlay');
+  var overlay = document.querySelector('.overlay');
   var context = modal.querySelector('.context-menu');
-  var modalText = body.querySelector('.modal-text');
+  var modalText = document.querySelector('.modal-text');
 
   var changeChips = function (pressedButton) {
+    overlay.classList.remove('hide');
     var PILE_REM;
     var PILE_ADD;
     var AMOUNT_PLUS;
@@ -19,7 +19,6 @@
     var TIME_TO_MOVE = 400;
     var stack = document.querySelector('.player__stack');
     var chipRack = document.querySelector('.table__chip-rack');
-    var chipRackRect = chipRack.getBoundingClientRect();
     var newChips = [];
     var i;
     var toSplit = false;
@@ -27,7 +26,6 @@
     var t = 2;
 
     modalText.textContent = 'Exchanging chips...';
-    modalText.style.opacity = '0';
     modalText.classList.remove('hide');
 
     switch (pressedButton.name) {
@@ -196,67 +194,41 @@
     }
 
     var chipsToExchange = window.util.selectChips(stack, PILE_REM, AMOUNT_MINUS);
-    var rulesRect = document.querySelector('.rules').getBoundingClientRect();
     for (i = 0; i < chipsToExchange.length; i++) {
-      var coord = window.util.getCoordinatesToMove(chipsToExchange[i], rulesRect);
-      var deg = window.util.getRandomNumber(-30, 30);
-      chipsToExchange[i].style.transform = 'translate(' + coord.x + 'px, ' + (coord.y - i) + 'px) rotate(' + deg + 'deg)';
-      window.setTimeout(window.util.removeElement, TIME_TO_MOVE * (t + 1), chipsToExchange[i]);
-    }
-    if (toSplit) {
-      window.setTimeout(window.util.splitChips, TIME_TO_MOVE * 2, chipsToExchange, -1);
-      window.setTimeout(window.util.splitChips, TIME_TO_MOVE * 4, chipsToExchange, 1);
-    }
-
-    var moveToDealer = function (chips) {
-      for (var i = 0; i < chips.length; i++) {
-        coord = window.util.getCoordinatesToMove(chips[i], chipRackRect);
-        chips[i].style.transform = 'translate(' + coord.x + 'px, ' + (coord.y - chips[i].getBoundingClientRect().width) + 'px) rotate(' + ROTATE_DEG + 'deg)';
+      chipsToExchange[i].classList.add('chip--exchange-to-dealer-' + i);
+      if (toSplit) {
+        window.setTimeout(window.util.addClass, TIME * 2, chipsToExchange[i], 'chip--split-' + i);
+        window.setTimeout(window.util.removeClass, TIME * 4, chipsToExchange[i], 'chip--split-' + i);
       }
-    };
-    window.setTimeout(moveToDealer, TIME_TO_MOVE * t, chipsToExchange);
-    window.setTimeout(window.util.checkPile, TIME_TO_MOVE * (t + 2), stack, PILE_REM);
+      window.setTimeout(window.util.addClass, TIME * t, chipsToExchange[i], 'chip--delete');
+      window.setTimeout(window.util.removeElement, TIME * (t + 1), chipsToExchange[i]);
+    }
+    window.setTimeout(window.util.checkPile, TIME * (t + 2), stack, PILE_REM);
 
+    // новые фишки после размена:
     for (i = 0; i < AMOUNT_PLUS; i++) {
       newChips.splice(0, 0, window.util.createChip(PILE_ADD));
     }
-    var setTransform = function (elem, i) {
-      coord = window.util.getCoordinatesToMove(elem, rulesRect);
-      deg = window.util.getRandomNumber(-30, 30);
-      elem.style.transform = 'translate(' + coord.x + 'px, ' + (coord.y - i) + 'px) rotate(' + deg + 'deg)';
-    };
     for (i = 0; i < newChips.length; i++) {
-      window.setTimeout(window.util.addChipsInPile, TIME_TO_MOVE * (t + 2), newChips[i], stack, newChips[i].classList.value.slice(-1), chipRack, ROTATE_DEG);
-      window.setTimeout(setTransform, TIME_TO_MOVE * (t + 2), newChips[i], i);
-    }
-    if (toSplitNew) {
-      window.setTimeout(window.util.splitChips, TIME_TO_MOVE * (t + 4), newChips, -1);
-      window.setTimeout(window.util.splitChips, TIME_TO_MOVE * (t + 6), newChips, 1);
-      t = t + 8;
-    } else {
-      t = t + 4;
-    }
-    var moveToStack = function (chips) {
-      var q = 0;
-      var chipsLength = chips.length;
-      var parentElementChildrenLength = 0;
-      for (i = chips.length - 1; i >= 0; i--) {
-        if (parentElementChildrenLength !== chips[i].parentElement.children.length) {
-          parentElementChildrenLength = chips[i].parentElement.children.length;
-          chipsLength -= q;
-        }
-        q++;
-        var y = (chips[i].parentElement.children.length - chipsLength) * -1 - i;
-        deg = window.util.getRandomNumber(-30, 30);
-        chips[i].style.transform = 'translate(0px, ' + y + 'px) rotate(' + deg + 'deg)';
+      window.setTimeout(window.util.addClass, TIME * (t + 2), newChips[i], 'chip--exchange-to-dealer-' + i);
+      window.setTimeout(window.util.addClass, TIME * (t + 2), newChips[i], 'chip--delete');
+      window.setTimeout(window.util.addChipInPile, TIME * (t + 2), newChips[i], stack, newChips[i].classList.value.slice(-1));
+      window.setTimeout(window.util.removeClass, TIME * (t + 3), newChips[i], 'chip--delete');
+      if (toSplitNew) {
+        window.setTimeout(window.util.addClass, TIME * (t + 5), newChips[i], 'chip--split-' + i);
+        window.setTimeout(window.util.removeClass, TIME * (t + 7), newChips[i], 'chip--split-' + i);
       }
-      window.sortPiles(stack);
-    };
-    window.setTimeout(moveToStack, TIME_TO_MOVE * t, newChips);
-    window.setTimeout(window.util.setStyle, HOLD, modalText, 'opacity', '1');
-    window.setTimeout(window.util.setStyle, TIME_TO_MOVE * t, modalText, 'opacity', '0');
-    window.setTimeout(window.util.addClass, TIME_TO_MOVE * t + TIME, modalText, 'hide');
+    }
+    t += toSplitNew ? 9 : 5;
+    for (i = 0; i < newChips.length; i++) {
+      window.setTimeout(window.util.removeClass, TIME * t, newChips[i], 'chip--exchange-to-dealer-' + i);
+    }
 
+    window.setTimeout(window.util.addClass, HOLD, modalText, 'opacity-1');
+    window.setTimeout(window.util.removeClass, TIME * t, modalText, 'opacity-1');
+    window.setTimeout(window.util.addClass, TIME * t + TIME, modalText, 'hide');
+    window.setTimeout(window.util.addClass, TIME * t + TIME, overlay, 'hide');
+    //window.setTimeout(window.util.setTabindex, TIME * t, );
   };
 
   var hideUnnecessary = function (contextMenu) {
@@ -264,7 +236,7 @@
       case 'context-menu__0':
         if (window.util.player.chips[0] < 5) {
           modal.classList.add('hide');
-          overlay.classList.add('hide');
+          overlayModal.classList.add('hide');
           contextMenu.classList.add('hide');
         }
         break;
@@ -308,19 +280,21 @@
 
   window.onStackContextClick = function (evt) {
     evt.preventDefault();
+    window.isLongTouch = true;
 
     var onOverlayEscPress = function (evt) {
       window.util.isEscEvent(evt, onOverlayClick);
     };
 
     var onOverlayClick = function () {
-      overlay.removeEventListener('click', onOverlayClick);
+      window.isLongTouch = false;
+      overlayModal.removeEventListener('click', onOverlayClick);
       modal.removeEventListener('click', onContextClick);
       document.removeEventListener('keydown', onOverlayEscPress);
-      modal.removeAttribute('style');
+      modal.classList.remove('modal--show');
+      overlayModal.classList.remove('modal-overlay--opacity-up');
       window.setTimeout(window.util.addClass, TIME, modal, 'hide');
-      overlay.style.opacity = '0';
-      window.setTimeout(window.util.addClass, TIME, overlay, 'hide');
+      window.setTimeout(window.util.addClass, TIME, overlayModal, 'hide');
       for (var i = 1; i < context.children.length; i++) {
         if (!context.children[i].classList.contains('hide')) {
           window.setTimeout(window.util.addClass, TIME, context.children[i], 'hide');
@@ -346,20 +320,26 @@
       onOverlayClick();
     };
 
-    var pressedChip = window.util.findAncestor(evt.target, 'chip');
-
-    if (pressedChip) {
-      var contextMenu = modal.querySelector('.context-menu__' + pressedChip.classList.value.slice(-1));
+    var showModal = function (activeChip) {
+      var contextMenu = modal.querySelector('.context-menu__' + activeChip.classList.value.slice(-1));
       contextMenu.classList.remove('hide');
       modal.classList.remove('hide');
-      window.setTimeout(window.util.setStyle, HOLD, modal, 'transform', 'translateY(0)');
-      overlay.style.opacity = '0';
-      overlay.classList.remove('hide');
-      window.setTimeout(window.util.setStyle, HOLD, overlay, 'opacity', '1');
+      var firstButton = contextMenu.querySelector('button:first-child');
+      firstButton.focus();
+      overlayModal.classList.remove('hide');
+      window.setTimeout(window.util.addClass, HOLD, modal, 'modal--show');
+      window.setTimeout(window.util.addClass, HOLD, overlayModal, 'modal-overlay--opacity-up');
       hideUnnecessary(contextMenu);
-      overlay.addEventListener('click', onOverlayClick);
+      overlayModal.addEventListener('click', onOverlayClick);
       document.addEventListener('keydown', onOverlayEscPress);
       modal.addEventListener('click', onContextClick);
+    };
+
+    var pressedChip = window.util.findAncestor(evt.target, 'chip');
+    if (pressedChip) {
+      showModal(pressedChip);
+    } else if (evt.target.classList.contains('chip')) {
+      showModal(evt.target);
     }
   };
 })();

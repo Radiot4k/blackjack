@@ -1,18 +1,94 @@
 .chips {
-  margin: 0;
-  margin-bottom: 10px;
+  box-sizing: border-box;
+
+  margin: 0 10px;
   padding: 0;
 
   list-style: none;
 }
 
 .chips__pile {
-  position: relative;
+  position: absolute;
 
-  width: 30px;
+  width: 28px;
+  height: 28px;
+  //margin: 0 3px;
 
-  transition: transform 0.4s ease;
+  transition: transform @duration ease-out;
+  //perspective: 800px;
 }
+
+// стопки фишек:
+.generate-chips-pile-transform(@n) when (@n > 1) {
+  .chips__pile:nth-child(@{n}) {
+    @translate: (@n - 1) * 32;
+    transform: translateX(~"@{translate}px");
+  }
+
+  .generate-chips-pile-transform(@n - 1);
+}
+
+.generate-chips-pile-transform(20);
+
+// стопка фишек из стэка на середину стола:
+.generate-chips-exchange-to-dealer-transform-x(@n) when (@n > 0) {
+  @x: (@n - 1) * 32;
+  @x2: 24;
+  .chips__pile:nth-child(@{n}) .chip.chip--exchange-to-dealer-4 {
+    transform: translate(~"calc(50vw - @{x}px - @{x2}px), calc(-6px - 50vh)");
+  }
+  .chips__pile:nth-child(@{n}) .chip.chip--exchange-to-dealer-3 {
+    transform: translate(~"calc(50vw - @{x}px - @{x2}px), calc(-4.5px - 50vh)");
+  }
+  .chips__pile:nth-child(@{n}) .chip.chip--exchange-to-dealer-2 {
+    transform: translate(~"calc(50vw - @{x}px - @{x2}px), calc(-3px - 50vh)");
+  }
+  .chips__pile:nth-child(@{n}) .chip.chip--exchange-to-dealer-1 {
+    transform: translate(~"calc(50vw - @{x}px - @{x2}px), calc(-1.5px - 50vh)");
+  }
+  .chips__pile:nth-child(@{n}) .chip.chip--exchange-to-dealer-0 {
+    transform: translate(~"calc(50vw - @{x}px - @{x2}px), -50vh");
+  }
+  .generate-chips-exchange-to-dealer-transform-x(@n - 1);
+}
+
+.generate-chips-exchange-to-dealer-transform-x(20);
+
+// разложение стопки фишек:
+.generate-chips-exchange-split-transform-x(@n) when (@n > 0) {
+    @x: (@n - 1) * 32;
+    @x2: 24;
+    .chips__pile:nth-child(@{n}) .chip.chip--split-4 {
+      transform: translate(~"calc(50vw - @{x}px - @{x2}px + 80px), -50vh");
+    }
+    .chips__pile:nth-child(@{n}) .chip.chip--split-3{
+      transform: translate(~"calc(50vw - @{x}px - @{x2}px + 60px), -50vh");
+    }
+    .chips__pile:nth-child(@{n}) .chip.chip--split-2 {
+      transform: translate(~"calc(50vw - @{x}px - @{x2}px + 40px), -50vh");
+    }
+    .chips__pile:nth-child(@{n}) .chip.chip--split-1 {
+      transform: translate(~"calc(50vw - @{x}px - @{x2}px + 20px), -50vh");
+    }
+    .chips__pile:nth-child(@{n}) .chip.chip--split-0{
+      transform: translate(~"calc(50vw - @{x}px - @{x2}px), -50vh");
+    }
+  .generate-chips-exchange-split-transform-x(@n - 1);
+}
+
+.generate-chips-exchange-split-transform-x(20);
+
+// фишки исчезают у диллера:
+.generate-chips-exchange-delete(@n) when (@n > 0) {
+  .chips__pile:nth-child(@{n}) .chip.chip--delete {
+    @x: (@n - 1) * 32;
+    transform: translate(~"calc(50vw - @{x}px - 35px), -100vh");
+  }
+
+  .generate-chips-exchange-delete(@n - 1);
+}
+
+.generate-chips-exchange-delete(20);
 
 .chip {
   position: absolute;
@@ -20,48 +96,63 @@
   justify-content: center;
   align-items: center;
 
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
 
-  transition: transform 0.4s ease;
-  transform-origin: center center;
+  transition: transform @duration + 0.1 ease;
+  //transform: rotateX(20deg);
   cursor: pointer;
-  // perspective: 40px;
-  // perspective-origin: 50% 0;
+  outline: none;
 
-  & svg {
-    width: 30px;
+  // &:last-child:nth-child(10):hover,
+  // &:last-child:nth-child(10):focus {
+  //   transform: translateY(calc(-25% - 15px)) rotate(25deg);
+  // }
 
-    fill: none;
+  .generate-chips-transform-hover(@n) when (@n > 0) {
+    &:last-child:nth-child(@{n}):not(.chip--context):hover,
+    &:last-child:nth-child(@{n}):not(.chip--context):focus {
+      @y: (@n - 1) * 1.5;
+      transform: translateY(~"calc(-25% - @{y}px)") rotate(25deg);
+    }
+
+    .generate-chips-transform-hover(@n - 1);
   }
+  .generate-chips-transform-hover(10);
 
-  &--0 .chip__color {
-    fill: #03c303;
-  }
-
-  &--1 .chip__color {
-    fill: #0eb9b9;
-  }
-
-  &--2 .chip__color {
-    fill: #d08600;
-  }
-
-  &--3 .chip__color {
-    fill: #b362b3;
-  }
-
-  &--4 .chip__color {
-    fill: #a70404;
-  }
-
-  &--5 .chip__color {
-    fill: #333333;
-  }
-
-  &--5 .rating {
-    font: 700 16px "Times New Roman",serif;
-  }
+  // & svg {
+  //   //width: 30px;
+  //
+  //   fill: none;
+  // }
+  //
+  // &--0 .chip__color {
+  //   fill: #03c303;
+  // }
+  //
+  // &--1 .chip__color {
+  //   fill: #0eb9b9;
+  // }
+  //
+  // &--2 .chip__color {
+  //   fill: #d08600;
+  // }
+  //
+  // &--3 .chip__color {
+  //   fill: #b362b3;
+  // }
+  //
+  // &--4 .chip__color {
+  //   fill: #a70404;
+  // }
+  //
+  // &--5 .chip__color {
+  //   fill: #333333;
+  // }
+  //
+  // &--5 .rating {
+  //   font: 700 16px "Times New Roman", serif;
+  // }
 
   &--context {
     position: static;
@@ -94,7 +185,22 @@
   &--5&--context {
     background-image: url("../img/chip100.svg");
   }
+
+  &--to-dealer {
+    transform: translate(calc(50vw), -50vh);
+  }
 }
+// фишки одна на другой:
+.generate-chips-transform(@n) when (@n > 1) {
+  .chip:nth-child(@{n}):not(.chip--context) {
+    @translate: -(@n - 1) * 1.5;
+    transform: translateY(~"@{translate}px");
+  }
+
+  .generate-chips-transform(@n - 1);
+}
+
+.generate-chips-transform(30);
 
 .chip__white {
   fill: white;
@@ -115,7 +221,9 @@
 
 .chip__rating {
   fill: black;
-  font: bold 16px "Times New Roman", serif;
+  font-weight: bold;
+  font-size: 16px;
+  font-family: "Times New Roman", serif;
 
   &--100 {
     font-size: 12px;
@@ -124,12 +232,6 @@
 
 .chip__gurt {
   fill: rgba(0, 0, 0, 0.2);
-}
-
-@media (max-height: 567px) {
-  .chips {
-    margin-bottom: 0;
-  }
 }
 
 @keyframes pile-width {

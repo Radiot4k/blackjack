@@ -11,7 +11,6 @@
   box-sizing: border-box;
 
   width: 100%;
-  //height: 30px;
   margin-bottom: 10px;
   padding: 5px;
 
@@ -61,7 +60,7 @@
 
     border-radius: 50%;
     box-shadow: inset 0 0 0 2px @font-color;
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow @duration ease-out;
 
   }
 
@@ -71,7 +70,6 @@
 
   &:active::before {
     box-shadow: inset 0 0 0 2px fade(#ffffff, 20%);
-    //transition: none;
   }
 }
 
@@ -95,6 +93,5 @@
 .form__radio:focus:checked + .form__label {
   &::before {
     box-shadow: inset 0 0 0 6px #ffffff;
-    //transition: none;
   }
 }

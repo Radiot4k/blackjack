@@ -1,47 +1,49 @@
 .player {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-}
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
 
-.player__bet {
-  margin-bottom: 10px;
+  width: 100%;
 }
 
 .player__money {
-  margin-bottom: 10px;
+  width: 100%;
+  margin-bottom: 20px;
+
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 0px 1px 0px #000000;
+  line-height: 0;
 }
 
 .player__stack {
   position: relative;
+  // display: flex;
+  // flex-wrap: wrap;
+  //width: 100%;
+  height: 28px;
 
-  width: 96px;
-  
-  transition: @transition-duration ease;
+  //transition: @transition-duration ease-out;
 }
 
 .player__buttons {
+  box-sizing: border-box;
+
+  position: absolute;
+  bottom: 0;
+
+  align-self: flex-end;
   display: flex;
+  flex-direction: column;
   justify-content: flex-end;
+
+  flex-shrink: 0;
+
+  min-height: 30px;
 }
 
-@media (max-height: 567px) {
-  .player {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
-
-  .player__money {
-    order: 1;
-
-    margin-bottom: 0;
-  }
-
-  .player__buttons {
-    order: 2;
-
-    width: 96px;
-  }
-}
+// @media (max-height: @mobile-height) {
+//   .player__money {
+//     align-self: flex-start;
+//   }
+// }

@@ -3,6 +3,9 @@
 (function () {
    window.sortPiles = function (elem) {
      var pilesAll = elem.querySelectorAll('.chips__pile');
+     if (pilesAll.length === 0) {
+       return ;
+     }
      var width = pilesAll[0].getBoundingClientRect().width;
      var row = 0;
      var line = -1;

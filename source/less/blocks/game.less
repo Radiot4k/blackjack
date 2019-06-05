@@ -1,14 +1,181 @@
 .game {
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   align-items: center;
 
   width: 100%;
+  height: calc(100% - 60px);
 }
 
-.game__bet {
+.game__deck {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+
+  width: 48px;
+  height: 72px;
+
+  & .card {
+    bottom: 0;
+    left: 0;
+    transform: rotate(-45deg);
+    transition: none;
+  }
+}
+
+.game__dealers-hand {
+  position: relative;
+
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
+
+  width: 48px;
+  height: 72px;
+  margin-top: 20px;
+
+  transition: transform @duration ease;
+  perspective: 800px;
+
+  & .card--open:nth-child(1) {
+    background-color: #ffffff;
+    //animation: open-dealers-card-1 @transition-duration linear, show-card 0.2s steps(1, end) forwards;
+    animation-name: open-dealers-card-1, show-card;
+    animation-duration: @duration, @duration / 2;
+    animation-timing-function: linear, step-start;
+    animation-fill-mode: forwards, forwards;
+    animation-delay: 0s, @duration / 2;
+  }
+
+  & .card--open:nth-child(2) {
+    background-color: #ffffff;
+    animation-name: open-dealers-card-2, show-card;
+    animation-duration: @duration, @duration / 2;
+    animation-timing-function: linear, step-start;
+    animation-fill-mode: forwards, forwards;
+    animation-delay: 0s, @duration / 2;
+  }
+}
+
+.game__players-hand {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+
+  width: 50px;
+  height: 150px;
+
+  transition: transform @duration ease;
+  perspective: 800px;
+
+  & .game__points {
+    bottom: 120px;
+  }
+
+  & .card {
+    bottom: 70px;
+  }
+}
+
+.generate-hand-transform(@n) when (@n > 1) {
+  .game__dealers-hand--children-@{n},
+  .game__players-hand--children-@{n} {
+    @x: (@n - 1) * 8;
+    transform: translateX(~"-@{x}px");
+  }
+
+  .game__dealers-hand .card:nth-child(@{n}),
+  .game__players-hand .card:nth-child(@{n}) {
+    @x2: (@n - 1) * 16px;
+    left: @x2;
+  }
+
+  .generate-hand-transform(@n - 1);
+}
+
+.generate-hand-transform(10);
+
+.game__hand {
+  position: absolute;
+  top: 50%;
+
+  display: block;
+
+  width: 90px;
+  height: 125px;
+
+  background-image: url("../img/hand.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  box-shadow: 0 0 0 #000000;
+  filter: drop-shadow(0 80px 8px rgba(0, 0, 0, 0.5));
+  animation: hand-deal 2s ease;
+}
+
+.game__points {
+  position: absolute;
+  right: 60px;
+  bottom: 50px;
+
+  display: block;
+
+  min-width: 20px;
+  padding: 0 3px;
+
+  font-size: 15px;
+  font-weight: bold;
+  color: #000000;
+  text-align: center;
+
+  background-color: #ffffff;
+  border-radius: 3px;
+  transition: opacity @duration ease;
+  opacity: 0;
+
+  &::after {
+    content: "";
+
+    position: absolute;
+    top: 50%;
+    right: -9px;
+
+    border: 4px solid transparent;
+    border-left: 5px solid #ffffff;
+    transform: translateY(-50%);
+  }
+}
+
+// @media (max-height: @mobile-height) {
+//   .game__players-hand {
+//     margin-bottom: 30px;
+//   }
+// }
+
+@keyframes hand-deal {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  25% {
+    transform: translateX(-100%);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translateX(100%);
+  }
+
+  75% {
+    transform: translateX(-100%);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
 }

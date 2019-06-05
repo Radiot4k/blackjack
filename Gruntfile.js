@@ -68,8 +68,8 @@ module.exports = function(grunt) {
 
     svgstore: {
       options: {
-        includeTitleElement: false,
-        cleanup: ["fill"]
+        includeTitleElement: false
+        //cleanup: ["fill"]
       },
       sprite: {
         files: {
